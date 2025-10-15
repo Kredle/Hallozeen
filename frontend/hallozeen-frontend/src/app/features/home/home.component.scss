@@ -1,0 +1,92 @@
+:host {
+  display: grid;
+  grid-template-rows: auto 1fr auto; /* верх — центр — низ */
+  justify-items: center; /* всё по центру по горизонтали */
+  min-height: 100vh;
+
+  /* отступы, чтобы верхний и нижний блоки не прилипали к краям */
+  padding: 24px 16px 6vh;
+
+  background-image: linear-gradient(0deg, rgba(21, 20, 25, 0.5) 0%, rgba(21, 20, 25, 0.5) 100%),
+    url('/assets/backgrounds/main-bg.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed; /* убери, если не нужен параллакс */
+  overflow: hidden;
+}
+
+/* 1) Фейк-ошибка — сверху по центру */
+.fake-error {
+  grid-row: 1;
+  align-self: start;
+
+  display: flex;
+  gap: 12px;
+  padding: 12px 16px;
+
+  color: var(--grey, #706e6e);
+  font-family: 'Share Tech Mono';
+  font-size: 28px;
+  font-weight: 400;
+  line-height: normal;
+}
+
+/* 2) Центральный контейнер с welcome-текстом — ровно по центру */
+:host > div:nth-of-type(2) {
+  grid-row: 2;
+  align-self: center;
+  display: grid;
+  row-gap: 8px; /* расстояние между двумя строками */
+  text-align: center;
+}
+
+/* Стили самих строк welcome-текста (оставляю как у тебя) */
+.welcome-text {
+  align-self: stretch;
+  text-align: center;
+  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.7);
+  font-family: Nosifer;
+  font-size: 64px;
+  font-weight: 400;
+  line-height: normal;
+  background: linear-gradient(180deg, #680606 0%, #680606 57.69%, #f00 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* 3) Кнопка — внизу, но с «воздухом» */
+.enter-btn {
+  grid-row: 3;
+  justify-self: center;
+  margin-bottom: 2vh; /* чтобы не прилипала к самому низу */
+
+  display: flex;
+  width: min(466px, 90vw);
+  padding: 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06); /* чуть контрастнее стекло */
+  color: var(--grey, #d0d0d0); /* светлее на тёмном фоне */
+
+  color: var(--grey, #706e6e);
+
+  /* cta */
+  font-family: 'Share Tech Mono';
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 150ms ease, background 150ms ease, color 150ms ease;
+}
+.enter-btn:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
