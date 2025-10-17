@@ -1,59 +1,95 @@
-:host {
-  display: grid;
-  grid-template-rows: auto 1fr auto; /* верх — центр — низ */
-  justify-items: center; /* всё по центру по горизонтали */
-  min-height: 100vh;
+/* ===== base & bg ===== */
+:host,
+.home {
+  display: block;
+  min-height: 100dvh;
+}
 
-  /* отступы, чтобы верхний и нижний блоки не прилипали к краям */
-  padding: 24px 16px 6vh;
-
-  background-image: linear-gradient(0deg, rgba(21, 20, 25, 0.5) 0%, rgba(21, 20, 25, 0.5) 100%),
+.home {
+  position: relative;
+  background-image:
+    linear-gradient(0deg, rgba(21,20,25,.55), rgba(21,20,25,.55)),
     url('/assets/backgrounds/main-bg.png');
-  background-position: center center;
   background-size: cover;
-  background-repeat: no-repeat;
-  background-attachment: fixed; /* убери, если не нужен параллакс */
+  background-position: center;
+  color: #fff;
   overflow: hidden;
 }
 
-/* 1) Фейк-ошибка — сверху по центру */
+/* ===== top text: not a button ===== */
 .fake-error {
-  grid-row: 1;
-  align-self: start;
+  position: absolute;
+  inset: 14px 0 auto 0;
+  display: flex;                 /* одна линия */
+  justify-content: center;       /* по центру строки */
+  align-items: baseline;         /* ровно по базовой линии текста */
+  gap: .5rem;
+  white-space: nowrap;           /* не переносить */
 
-  display: flex;
-  gap: 12px;
-  padding: 12px 16px;
-
-  color: var(--grey, #706e6e);
+  color: #706e6e;
   font-family: 'Share Tech Mono';
   font-size: 28px;
-  font-weight: 400;
   line-height: normal;
+  letter-spacing: .08em;
+  text-shadow: 0 1px 0 rgba(0,0,0,.35);
+  pointer-events: none;          /* если нужно — не кликабельно */
 }
 
-/* 2) Центральный контейнер с welcome-текстом — ровно по центру */
-:host > div:nth-of-type(2) {
-  grid-row: 2;
-  align-self: center;
-  display: grid;
-  row-gap: 8px; /* расстояние между двумя строками */
-  text-align: center;
+.fe-icon {
+  width: 1.1em;                  /* подгон по размеру текста */
+  height: 1.1em;
+  flex: 0 0 auto;
+  vertical-align: middle;        /* доп. выравнивание для svg */
 }
 
-/* Стили самих строк welcome-текста (оставляю как у тебя) */
-.welcome-text {
-  align-self: stretch;
-  text-align: center;
-  text-shadow: 0 4px 4px rgba(0, 0, 0, 0.7);
-  font-family: Nosifer;
-  font-size: 64px;
-  font-weight: 400;
-  line-height: normal;
-  background: linear-gradient(180deg, #680606 0%, #680606 57.69%, #f00 100%);
+
+/* ===== Фигма-холст ===== */
+/* В фигме: 1440×894. Перевёл px -> % для адаптивности */
+.title,
+.title * { box-sizing: border-box; }
+
+.title {
+  position: relative;
+  width: 100%;
+  min-height: clamp(600px, 62vw, 100dvh); /* близко к 1440×894 */
+}
+
+/* общий «кровавый» стиль текста */
+@mixin blood-text {
+  background: var(
+    --red-gradient,
+    linear-gradient(
+      180deg,
+      rgba(104, 6, 6, 1) 0%,
+      rgba(104, 6, 6, 1) 57.692307233810425%,
+      rgba(255, 0, 0, 1) 100%
+    )
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+
+  font-family: "Nosifer";
+  // text-shadow: 0 2px 0 rgba(0,0,0,.55), 0 10px 26px rgba(0,0,0,.6);
+  // filter: drop-shadow(0 12px 10px rgba(0,0,0,.45));
+  position: absolute;
+  white-space: nowrap;
+}
+
+/* === позиции из фигмы (1440×894 -> %) === */
+.will-you    { @include blood-text; font-size: clamp(22px, 4.4vw, 64px);  left: 2.29167%; top: 0%; }
+.step-inside { @include blood-text; font-size: clamp(28px, 6.7vw, 96px);  left: 49.93056%; top: 19.23937%; }
+.before      { @include blood-text; font-size: clamp(14px, 2.2vw, 32px);  left: 86.45833%; top: 51.11857%; }
+.the-blood   { @include blood-text; font-size: clamp(42px, 10.8vw, 156px); left: 3.40278%; top: 60.29083%; }
+.runs-dry    { @include blood-text; font-size: clamp(16px, 3.4vw, 48px);  left: 0%; top: 90.60403%; }
+
+/* ===== CTA bottom ===== */
+.cta {
+  position: absolute;
+  left: 0; right: 0;
+  bottom: calc(env(safe-area-inset-bottom) + clamp(16px, 3vh, 36px));
+  display: grid;
+  place-items: center;
 }
 
 /* 3) Кнопка — внизу, но с «воздухом» */
@@ -71,7 +107,6 @@
 
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.06); /* чуть контрастнее стекло */
-  color: var(--grey, #d0d0d0); /* светлее на тёмном фоне */
 
   color: var(--grey, #706e6e);
 
@@ -88,5 +123,96 @@
 .enter-btn:hover {
   transform: translateY(-2px);
   background: rgba(255, 255, 255, 0.12);
-  color: #fff;
+  color: #a19f9f;
+}
+
+.glass {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.22);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.12);
+  -webkit-backdrop-filter: blur(9px) saturate(120%);
+  backdrop-filter: blur(9px) saturate(120%);
+}
+
+.enter-btn:hover  { transform: translateY(-1px); }
+.enter-btn:active { transform: translateY(1px) scale(.99); }
+.enter-btn:focus-visible { outline: 2px solid rgba(185,12,12,.9); outline-offset: 3px; }
+
+.blur,
+.blur * {
+  box-sizing: border-box;
+}
+.blur {
+  background: linear-gradient(
+    107.51deg,
+    rgba(23, 23, 26, 0.8) 0%,
+    rgba(6, 8, 15, 0.8) 100%
+  );
+  height: 1080px;
+  position: relative;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+
+/* === POPUP: паутина по центру экрана === */
+.web-pop-up {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* чтобы клики проходили, кроме паука */
+  z-index: 50;
+}
+
+.spider-web {
+  width: min(85vw, 1000px);
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  position: relative;
+}
+
+/* === блок с пауком и крестиком === */
+.spider {
+  position: absolute;
+  right: 11%;
+  left: 30%;
+  bottom: 9.91%;
+  top: 19.26%;
+  transform: translate(-45.23px, -96.26px);
+  overflow: visible;
+  width: clamp(70px, 8vw, 110px);
+  aspect-ratio: 1;
+  pointer-events: auto;
+}
+
+/* сам паук */
+.spider-close {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* крестик поверх паука — по центру */
+.close {
+  position: absolute;
+  top: 40%;
+  left: 60%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 55%; /* размер крестика относительно паука */
+  aspect-ratio: 1;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+/* при наведении крест чуть «шевелится» */
+.close:hover {
+  transform: translate(-50%, -50%) scale(1.05);
 }

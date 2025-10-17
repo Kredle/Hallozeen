@@ -1,14 +1,35 @@
-<div class="fake-error">
-  404: Potion Not Found <img src="/assets/svg/bottle-tonic.svg" alt="bottle-tonic" />
-</div>
+<section class="home">
+  <!-- только текст, по центру сверху -->
 
-<div>
-  <div class="welcome-text">
-    WILL YOU STEP INSIDE...
+  <div class="fake-error" role="status" aria-live="polite">
+    <span class="code">404:</span>
+    <span class="msg">Potion Not Found</span>
+    <img class="fe-icon" src="/assets/svg/bottle-tonic.svg" alt="" aria-hidden="true" />
   </div>
-  <div class="welcome-text">
-    BEFORE THE BLOOD RUNS DRY?
+
+  <!-- холст с абсолютным позиционированием как в фигме -->
+  <div class="title">
+    <div class="will-you">WILL YOU</div>
+    <div class="step-inside">STEP INSIDE...</div>
+    <div class="before">BEFORE</div>
+    <div class="the-blood">THE BLOOD</div>
+    <div class="runs-dry">RUNS DRY?</div>
+  </div>
+
+  <!-- CTA у нижнего края -->
+  <div class="cta">
+    <button class="enter-btn" type="button" (click)="enterAbyssPressed()">ENTER THE ABYSS</button>
+  </div>
+</section>
+
+@if (isEntered) {
+<div class="web-pop-up">
+  <img class="spider-web" src="assets/svg/web-pop-up.svg" />
+  <div class="spider">
+    <a href="#">
+      <img class="spider-close" src="assets/svg/spider.svg" />
+      <img class="close" src="assets/svg/close.svg" />
+    </a>
   </div>
 </div>
-
-<button class="enter-btn">ENTER THE ABYSS</button>
+}
