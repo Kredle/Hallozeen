@@ -12,4 +12,9 @@ export class HomeComponent {
   enterAbyssPressed() {
     this.isEntered = true;
   }
+
+  onPopupClose() {
+    this.isEntered = false;
+    window.location.href = '/register';
+  }
 }

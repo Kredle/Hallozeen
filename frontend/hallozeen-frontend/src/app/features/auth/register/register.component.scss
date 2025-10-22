@@ -1,0 +1,268 @@
+:host {
+  display: grid;
+  place-items: center;
+
+  height: auto;
+  background: var(--grey-gradient, linear-gradient(108deg, #2d2d4e 0%, #3d445c 100.69%));
+}
+
+.fake-error {
+  position: absolute;
+  inset: 14px 0 auto 0;
+  display: flex; /* одна линия */
+  justify-content: center; /* по центру строки */
+  align-items: baseline; /* ровно по базовой линии текста */
+  gap: 0.5rem;
+  white-space: nowrap; /* не переносить */
+
+  color: #706e6e;
+  font-family: 'Share Tech Mono';
+  font-size: 28px;
+  line-height: normal;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+  pointer-events: none; /* если нужно — не кликабельно */
+}
+
+.fe-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  position: relative;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+
+.main-header {
+  color: var(--green, #04db73);
+  text-align: center;
+
+  margin-top: 64px;
+
+  /* H3 */
+  font-family: 'Share Tech Mono';
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.form-container {
+  padding: 48px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative;
+}
+
+label,
+.err {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+
+  color: var(--grey, #706e6e);
+
+  /* body */
+  font-family: 'Share Tech Mono';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.err {
+  margin-top: 4px;
+  color: var(--red, #b83838);
+}
+
+input {
+  border-radius: 4px;
+  border: 1px solid var(--light-grey, #f2f2f2);
+
+  color: var(--grey, #706e6e);
+
+  /* body */
+  font-family: 'Share Tech Mono';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  padding: 16px 12px 16px 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+
+  &:hover {
+    box-shadow: 0 0 20px 0 rgba(131, 38, 231, 0.8);
+  }
+
+  &:focus {
+    outline: none;
+    border-color: var(--purple, #8326e7);
+    box-shadow: 0 0 10px 0 rgba(131, 38, 231, 0.8);
+  }
+
+  &:not(:placeholder-shown) {
+    border: 1.5px solid var(--purple, #8b1fb8);
+
+    color: var(--violet, #5a3a67);
+  }
+}
+
+.form-input {
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: center;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+
+input::placeholder {
+  border-radius: 4px;
+  padding: 16px 12px 16px 12px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: start;
+  justify-content: flex-start;
+  align-self: stretch;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.register-btn {
+  display: flex;
+  width: min(466px, 90vw);
+  height: 80px;
+  padding: 24px;
+  margin-top: 32px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06); /* чуть контрастнее стекло */
+
+  color: var(--grey, #706e6e);
+
+  /* cta */
+  font-family: 'Share Tech Mono';
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  cursor: pointer;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 150ms ease, background 150ms ease, color 150ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.12);
+    color: #a19f9f;
+  }
+}
+
+.login-btn {
+  display: flex;
+  padding: 24px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  align-self: stretch;
+
+  color: var(--grey, #706e6e);
+  border-radius: 20px;
+
+  /* cta */
+  font-family: 'Share Tech Mono';
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 0 20px 0 rgba(38, 231, 96, 0.8);
+  }
+}
+
+/* === POPUP: паутина по центру экрана === */
+.web-pop-up {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* чтобы клики проходили, кроме паука */
+  z-index: 50;
+}
+
+.spider-web {
+  width: min(85vw, 1000px);
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  position: relative;
+}
+
+/* === блок с пауком и крестиком === */
+.spider {
+  position: absolute;
+  right: 11%;
+  left: 25%;
+  bottom: 9.91%;
+  top: 59%;
+  transform: translate(-45.23px, -96.26px);
+  overflow: visible;
+  width: clamp(70px, 8vw, 110px);
+  aspect-ratio: 1;
+  pointer-events: auto;
+}
+
+/* сам паук */
+.spider-close {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* крестик поверх паука — по центру */
+.close {
+  position: absolute;
+  top: 40%;
+  left: 60%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 55%; /* размер крестика относительно паука */
+  aspect-ratio: 1;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+/* при наведении крест чуть «шевелится» */
+.close:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}

@@ -1,0 +1,118 @@
+:host,
+.success {
+  min-height: 100dvh;
+}
+
+.success {
+  background-image: url('/assets/backgrounds/reg-success-bg.png');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+  overflow: hidden;
+}
+
+.fake-error {
+  position: absolute;
+  inset: 14px 0 auto 0;
+  display: flex; /* одна линия */
+  justify-content: center; /* по центру строки */
+  align-items: baseline; /* ровно по базовой линии текста */
+  gap: 0.5rem;
+  white-space: nowrap; /* не переносить */
+
+  color: #706e6e;
+  font-family: 'Share Tech Mono';
+  font-size: 28px;
+  line-height: normal;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+  pointer-events: none; /* если нужно — не кликабельно */
+}
+
+.fe-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  position: relative;
+  overflow: visible;
+  aspect-ratio: 1;
+}
+
+/* общий «кровавый» стиль текста */
+@mixin blood-text {
+  background: var(
+    --red-gradient,
+    linear-gradient(
+      180deg,
+      rgba(104, 6, 6, 1) 0%,
+      rgba(104, 6, 6, 1) 57.692307233810425%,
+      rgba(255, 0, 0, 1) 100%
+    )
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  font-family: "Nosifer";
+  position: absolute;
+  white-space: nowrap;
+}
+
+// shared positioning helpers
+.text-line {
+  position: absolute;
+  white-space: nowrap;
+  line-height: 0.95;
+}
+
+// === exact lines ===
+.the-pact {
+  @include blood-text;
+  @extend .text-line;
+  font-size: 3rem;
+  left: 26%;
+  top: 14%;
+}
+
+.is-sealed {
+  @include blood-text;
+  @extend .text-line;
+  font-size: 7rem;
+  left: 50%;
+  top: 19%;
+  transform: translateX(-10%); // slight push left like the mock
+}
+
+.your-name-is {
+  @include blood-text;
+  @extend .text-line;
+  font-size: 1.5rem;
+  left: 42%;
+  top: 34%;
+}
+
+.now-written-in {
+  @include blood-text;
+  @extend .text-line;
+  font-size: 4.5rem;
+  left: 35%;
+  top: 50%;
+  transform: translateX(-10%); // nudged towards center-left
+}
+
+.the-book {
+  @include blood-text;
+  @extend .text-line;
+  font-size: 1rem;
+  left: 22%;
+  top: 57%;
+}
+
+.of-shadows {
+  @include blood-text;
+  @extend .text-line;
+  font-size: 2rem;
+  left: 10%;
+  top: 90%;
+  transform: translateX(-50%); // centered giant footer line
+}

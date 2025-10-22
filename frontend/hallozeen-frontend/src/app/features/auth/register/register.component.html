@@ -1,0 +1,153 @@
+<header>
+  <div class="fake-error" role="status" aria-live="polite">
+    <span class="msg">Hallozeen</span>
+    <img class="fe-icon" src="/assets/svg/bottle-tonic.svg" alt="" aria-hidden="true" />
+  </div>
+</header>
+
+<div class="form-container">
+  <form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)" novalidate>
+    <div class="main-header">
+      <h3>
+        DO YOU DARE TO JOIN<br />
+        THE CURSED DARKNESS?
+      </h3>
+    </div>
+
+    <!-- Name -->
+    <div class="form-input" [class.invalid]="nameCtrl.invalid && nameCtrl.touched">
+      <label for="name">YOUR MORTAL NAME</label>
+      <input
+        type="text"
+        id="name"
+        name="name"
+        placeholder="The one you used last full moon"
+        [(ngModel)]="name"
+        #nameCtrl="ngModel"
+        required
+        minlength="2"
+        (blur)="nameCtrl.control.updateValueAndValidity()"
+      />
+      @if (nameCtrl.touched && nameCtrl.errors) {
+        <div class="err">
+          @if (nameCtrl.errors['required']) { <span>Name is required.</span> }
+          @if (nameCtrl.errors['minlength']) { <span>At least 2 characters.</span> }
+        </div>
+      }
+    </div>
+
+    <!-- Email -->
+    <div class="form-input" [class.invalid]="emailCtrl.invalid && emailCtrl.touched">
+      <label for="email">SUMMONING CHANNEL</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="The one you used last full moon"
+        [(ngModel)]="email"
+        #emailCtrl="ngModel"
+        required
+        email
+      />
+      @if (emailCtrl.touched && emailCtrl.errors) {
+        <div class="err">
+          @if (emailCtrl.errors['required']) { <span>Email is required.</span> }
+          @if (emailCtrl.errors['email']) { <span>Enter a valid email.</span> }
+        </div>
+      }
+    </div>
+
+    <!-- Password -->
+    <div class="form-input" [class.invalid]="passwordCtrl.invalid && passwordCtrl.touched">
+      <label for="password">BINDING SPELL</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Whisper it carefully... the walls listen"
+        [(ngModel)]="password"
+        #passwordCtrl="ngModel"
+        required
+        minlength="8"
+        pattern="^(?=.*[A-Za-z])(?=.*\d).{8,}$"
+        autocomplete="new-password"
+      />
+      @if (passwordCtrl.touched && passwordCtrl.errors) {
+        <div class="err">
+          @if (passwordCtrl.errors['required']) { <span>Password is required.</span> }
+          @if (passwordCtrl.errors['minlength']) { <span>At least 8 characters.</span> }
+          @if (passwordCtrl.errors['pattern']) { <span>Use letters and numbers.</span> }
+        </div>
+      }
+    </div>
+
+    <!-- Repeat 1 -->
+    <div class="form-input" [class.invalid]="pass1Ctrl.touched && hasAllPasswords && !passwordsMatch">
+      <label for="pass-validation">REPEAT THE INCANTATION</label>
+      <input
+        type="password"
+        id="pass-validation"
+        name="passValidation"
+        placeholder="Make sure the words match… or face the void"
+        [(ngModel)]="passValidation"
+        #pass1Ctrl="ngModel"
+        required
+        autocomplete="new-password"
+      />
+      @if (pass1Ctrl.touched && hasAllPasswords && !passwordsMatch) {
+        <div class="err">The incantations must be identical.</div>
+      }
+    </div>
+
+    <!-- Repeat 2 -->
+    <div class="form-input" [class.invalid]="pass2Ctrl.touched && hasAllPasswords && !passwordsMatch">
+      <label for="pass-validation-2">REPEAT YOUR INCANTATION AGAIN</label>
+      <input
+        type="password"
+        id="pass-validation-2"
+        name="passValidation2"
+        placeholder="This one for fun"
+        [(ngModel)]="passValidation2"
+        #pass2Ctrl="ngModel"
+        required
+        autocomplete="new-password"
+      />
+      @if (pass2Ctrl.touched && hasAllPasswords && !passwordsMatch) {
+        <div class="err">All three must match exactly.</div>
+      }
+    </div>
+
+    <!-- Global mismatch -->
+    @if (regForm.submitted && !passwordsMatch) {
+      <p class="err">Your spells don’t match. Try again.</p>
+    }
+
+    <button
+      class="register-btn"
+      type="submit"
+      [disabled]="regForm.invalid || !passwordsMatch"
+      aria-disabled="{{ regForm.invalid || !passwordsMatch }}"
+    >
+      OFFER YOUR SOUL
+    </button>
+  </form>
+  <button
+      class="login-btn"
+      type="button"
+      (click)="navigateToLogin()"
+    >
+      UNSEAL THE GATE
+    </button>
+</div>
+
+@if (isSubmitted) {
+<div class="web-pop-up">
+  <img class="spider-web" src="assets/svg/web-pop-up.svg" />
+  <div class="spider">
+    <a href="register/success">
+      <img class="spider-close" src="assets/svg/spider.svg" />
+      <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()"/>
+    </a>
+  </div>
+</div>
+}
