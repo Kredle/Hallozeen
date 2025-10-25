@@ -31,6 +31,12 @@ namespace Hallozeen.API
             // Register JWTService
             builder.Services.AddSingleton(new JWTService(builder.Configuration["Jwt:Secret"]));
 
+            // Register AutoMapper
+            builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
+
+            // Register ProductRepository
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
             // Register AuthRepository
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
@@ -54,7 +60,7 @@ namespace Hallozeen.API
             {
                 options.AddPolicy("Localhost",
                     policy => {
-                        policy.WithOrigins("https://lively-stone-0d170a803.2.azurestaticapps.net").AllowAnyHeader().AllowAnyMethod();
+                        policy.WithOrigins("https://localhost:4200").AllowAnyHeader().AllowAnyMethod();
                     });
             });
             var app = builder.Build();

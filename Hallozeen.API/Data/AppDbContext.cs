@@ -11,6 +11,7 @@ namespace Hallozeen.API.Data
         }
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Product> Products { get; set; } // Added
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -37,6 +38,14 @@ namespace Hallozeen.API.Data
 
                 entity.HasIndex(u => u.Password)
                     .IsUnique();
+            });
+
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+                entity.Property(p => p.Name).IsRequired().HasMaxLength(100);
+                entity.Property(p => p.Description).HasMaxLength(500);
+                entity.Property(p => p.Cost);
             });
         }
     }
