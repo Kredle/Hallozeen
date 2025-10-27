@@ -5,6 +5,7 @@ import { RegisterSuccessComponent } from './features/auth/register/register-succ
 import { LoginComponent } from './features/auth/login/login.component';
 import { LoginSuccessComponent } from './features/auth/login/login-success/login-success.component';
 import { ProductsComponent } from './features/products/products.component';
+import { AdComponent } from './features/ad/ad.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,5 +13,6 @@ export const routes: Routes = [
   { path: 'register/success', component: RegisterSuccessComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login/success', component: LoginSuccessComponent },
-  { path: 'products', component: ProductsComponent}
+  { path: 'products', component: ProductsComponent },
+  { path: 'ad', component: AdComponent }
 ];

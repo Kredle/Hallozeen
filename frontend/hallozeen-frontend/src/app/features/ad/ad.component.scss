@@ -1,0 +1,99 @@
+/* ====== базовые переменные (под себя можно скорректировать) ====== */
+.halloween{
+  /* замени путь на свой; это «фон-компонент» (картинка 1) */
+  --bg-url: url("/assets/backgrounds/party-pop-up.png");
+  --title: #F06A1A;
+  --light: #FFCDA1;
+  --date:  #F6A41A;
+
+  position: relative;
+  min-height: 90svh;          /* на всю страницу */
+  width: 100%;
+  overflow: hidden;
+
+  /* сам фон */
+  background-color: #7F5A8F;
+  background-image: var(--bg-url);
+  background-repeat: no-repeat;
+  background-size: contain;      /* масштабируем фон по экрану */
+  background-position: center center;
+}
+
+/* Контейнер для абсолютного позиционирования текстов */
+.halloween .scene{
+  position: relative;
+  min-height: 100svh;
+  width: 100%;
+}
+
+.close {
+  position: absolute;
+  top: 5%;
+  right: 10.5%;
+  width: clamp(30px, 5vw, 50px);
+  height: clamp(30px, 5vw, 50px);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+}
+
+/* ====== Тексты поверх фона (позиции в %, как в макете) ====== */
+
+/* Заголовок HALLOWEEN — верхняя правая зона */
+.halloween .title{
+  position: absolute;
+  left: 53%;
+  top: 15%;
+  margin: 0;
+  font-family: 'Jolly Lodger', cursive;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--title);
+  /* адаптивный размер */
+  font-size: 10rem;
+  text-transform: uppercase;
+}
+
+/* Текст в фиолетовой «звезде» (она нарисована на фоне) */
+.halloween .badge-text{
+  position: absolute;
+  left: 57.5%;
+  top: 40%;
+  margin: 0;
+  text-align: center;
+  font-family: 'Jolly Lodger', cursive;
+  font-weight: 400;
+  line-height: normal;
+  color: var(--light);
+  font-size: 6rem;
+  text-transform: none;
+}
+
+/* Маленький абзац — центр-право */
+.halloween .blurb{
+  position: absolute;
+  left: 56.5%;
+  top: 60%;
+  width: 22%;
+  margin: 0;
+  font-family: 'Share Tech Mono', monospace;
+  font-weight: 500;
+  line-height: 1.35;
+  color: #FFE9D7;
+  font-size: 1rem;
+  text-align: center;
+}
+
+/* Дата — низ справа */
+.halloween .date{
+  position: absolute;
+  left: 55%;
+  bottom: 10%;
+  margin: 0;
+  font-family: 'Jolly Lodger', cursive;
+  font-weight: 400;
+  color: var(--date);
+  font-size: 4rem;
+  text-transform: uppercase;
+}
