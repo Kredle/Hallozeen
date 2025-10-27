@@ -17,7 +17,7 @@ namespace Hallozeen.API.Controllers
         private static readonly Dictionary<string, string> MathQuestions = new()
         {
             { "lim(n->inf, (24n^3-2n^2-15n-1)/(2n^3-2n^2-15n-1))", "12" },
-            { "lim(n->0, x/sin(x))", "1" },
+            { "lim(x->0, x/sin(x))", "1" },
             { "f'(2), f(x) = x^2 + 3", "7" }
         };
 

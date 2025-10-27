@@ -15,8 +15,8 @@ namespace Hallozeen.API.Data.Validators
             RuleFor(x => x.Password).NotEmpty()
                 .MinimumLength(8).WithMessage("Spell must be at least 8 characters long")
                 .MaximumLength(20).WithMessage("Spell must not exceed 20 characters long");
-            RuleFor(x => x.ConfirmPassword1).Equal(x => x.Password).WithMessage("Not all incantation match");
-            RuleFor(x => x.ConfirmPassword2).Equal(x => x.Password).WithMessage("Not all incantation match");
+            RuleFor(x => x.ConfirmPassword1).Equal(x => x.Password).WithMessage("Not all incantations match");
+            RuleFor(x => x.ConfirmPassword2).Equal(x => x.Password).WithMessage("Not all incantations match");
         }
     }
 }

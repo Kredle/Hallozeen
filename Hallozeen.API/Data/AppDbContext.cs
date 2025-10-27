@@ -11,7 +11,9 @@ namespace Hallozeen.API.Data
         }
 
         public DbSet<User> Users { get; set; }
-        public DbSet<Product> Products { get; set; } // Added
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderProduct> OrderProducts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -46,6 +48,30 @@ namespace Hallozeen.API.Data
                 entity.Property(p => p.Name).IsRequired().HasMaxLength(100);
                 entity.Property(p => p.Description).HasMaxLength(500);
                 entity.Property(p => p.Cost);
+            });
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.HasKey(o => o.Id);
+                entity.Property(o => o.UserId).IsRequired(); // Added
+                entity.HasOne<User>()
+                    .WithMany()
+                    .HasForeignKey(o => o.UserId)
+                    .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<OrderProduct>(entity =>
+            {
+                entity.HasKey(op => new { op.OrderId, op.ProductId });
+                entity.Property(op => op.Quantity).IsRequired();
+
+                entity.HasOne(op => op.Order)
+                    .WithMany(o => o.OrderProducts)
+                    .HasForeignKey(op => op.OrderId);
+
+                entity.HasOne(op => op.Product)
+                    .WithMany()
+                    .HasForeignKey(op => op.ProductId);
             });
         }
     }

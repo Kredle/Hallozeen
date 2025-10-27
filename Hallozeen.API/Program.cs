@@ -40,6 +40,9 @@ namespace Hallozeen.API
             // Register AuthRepository
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
+            // Register OrderRepository
+            builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+
             // Add JWT authentication
             builder.Services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
