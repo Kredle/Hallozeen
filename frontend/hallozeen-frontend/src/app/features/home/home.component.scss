@@ -169,6 +169,17 @@
   z-index: 50;
 }
 
+.ad {
+  position: absolute;
+  overflow: visible;
+  z-index: 100;
+  pointer-events: auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+
 .spider-web {
   width: min(85vw, 1000px);
   height: auto;
@@ -216,3 +227,78 @@
 .close:hover {
   transform: translate(-50%, -50%) scale(1.05);
 }
+
+/* === Оверлей и глаза (по умолчанию скрыты) === */
+.hover-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 40;                 /* ниже твоего .web-pop-up (z-index:50) */
+  display: grid;
+  place-items: center;
+  background: rgba(0, 0, 0, 0.72);
+  opacity: 0;
+  pointer-events: none;        /* не перехватываем клики */
+  transform: scale(1.02);      /* лёгкая перспектива при появлении */
+  transition: opacity .28s ease, transform .28s ease;
+}
+
+.eyes,
+.eye {                         /* общие эффекты для одного или двух глаз */
+  width: 50vw;     /* подгони под свой арт */
+  max-height: 70vh;
+  filter: drop-shadow(0 8px 22px rgba(0,0,0,.6));
+  opacity: 0;
+  transform: translateY(50px) scale(.96);
+  transition: opacity .35s .05s cubic-bezier(.22,.61,.36,1), 
+              transform .35s .05s cubic-bezier(.22,.61,.36,1);
+  will-change: transform, opacity;
+}
+
+/* Если используешь два отдельных глаза — разнесём их чуть-чуть */
+.eye-left  { transform: translate(-6vw, 8px)  scale(.96); }
+.eye-right { transform: translate( 6vw, 8px)  scale(.96); }
+
+/* Маленькая «мигающая» анимация (необязательно) */
+@keyframes blink {
+  0%, 97%, 100% { transform: translateY(0) scaleY(1); }
+  98%           { transform: translateY(2px) scaleY(0.1); }
+}
+.prefers-anim .eyes,
+.prefers-anim .eye { animation: blink 4.6s infinite; }
+
+/* === Показываем оверлей при наведении на .hover-trigger === */
+/* Современный чисто-CSS способ: :has() */
+.home:has(.hover-trigger:hover) .hover-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+.home:has(.hover-trigger:hover) .eyes,
+.home:has(.hover-trigger:hover) .eye {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* === Фолбэк для браузеров без :has() (или если оставишь события в шаблоне) === */
+.home.dimmed .hover-overlay {
+  opacity: 1;
+  transform: scale(1);
+}
+.home.dimmed .eyes,
+.home.dimmed .eye {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* Активный оверлей: затемнение + размытие фона */
+.home:has(.hover-trigger:hover) .hover-overlay,
+.home.dimmed .hover-overlay {
+  /* полупрозрачная вуаль — чтобы блюр был виден */
+  background: rgba(0, 0, 0, 0.55);
+
+  /* собственно блюр + чуть насыщенности/контраста для «неонового» эффекта */
+  -webkit-backdrop-filter: blur(10px) saturate(115%) contrast(105%);
+  backdrop-filter: blur(10px) saturate(115%) contrast(105%);
+}
+
+/* необязательно, но иногда помогает движкам корректно рисовать слой */
+.hover-overlay { will-change: backdrop-filter, opacity, transform; }

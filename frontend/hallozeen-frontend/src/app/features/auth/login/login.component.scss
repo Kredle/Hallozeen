@@ -38,7 +38,7 @@
   color: var(--green, #04db73);
   text-align: center;
 
-  margin-top: 64px;
+  margin-bottom: 48px;
 
   /* H3 */
   font-family: 'Share Tech Mono';
@@ -56,6 +56,14 @@
   align-items: center;
   justify-content: flex-start;
   position: relative;
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* center everything inside */
+  justify-content: center;
+  width: 100%;
 }
 
 label,
@@ -149,31 +157,30 @@ input::placeholder {
   position: relative;
 }
 
+.login-btn,
 .register-btn {
   display: flex;
   width: min(466px, 90vw);
   height: 80px;
   padding: 24px;
-  margin-top: 32px;
   justify-content: center;
   align-items: center;
-
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.06); /* чуть контрастнее стекло */
-
-  color: var(--grey, #706e6e);
-
-  /* cta */
   font-family: 'Share Tech Mono';
   font-size: 28px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-
   cursor: pointer;
-
-  border: 1px solid rgba(255, 255, 255, 0.15);
   transition: transform 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+/* distinct visual styles */
+.login-btn {
+  margin-top: 32px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--grey, #706e6e);
 
   &:hover {
     transform: translateY(-2px);
@@ -182,29 +189,16 @@ input::placeholder {
   }
 }
 
-.login-btn {
-  display: flex;
-  padding: 24px;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  align-self: stretch;
-
+.register-btn {
+  margin-top: 16px;
+  background: transparent;
   color: var(--grey, #706e6e);
-  border-radius: 20px;
-
-  /* cta */
-  font-family: 'Share Tech Mono';
-  font-size: 28px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  cursor: pointer;
 
   &:hover {
     box-shadow: 0 0 20px 0 rgba(38, 231, 96, 0.8);
   }
 }
+
 
 /* === POPUP: паутина по центру экрана === */
 .web-pop-up {
@@ -243,9 +237,9 @@ input::placeholder {
 .spider {
   position: absolute;
   right: 11%;
-  left: 25%;
+  left: 72%;
   bottom: 9.91%;
-  top: 59%;
+  top: 81%;
   transform: translate(-45.23px, -96.26px);
   overflow: visible;
   width: clamp(70px, 8vw, 110px);
@@ -279,6 +273,24 @@ input::placeholder {
   transform: translate(-50%, -50%) scale(1.05);
 }
 
+.back-home {
+  position: absolute;
+  display: flex;
+  left: -90%;
+  white-space: nowrap;
+
+  color: #706e6e;
+  font-family: 'Share Tech Mono';
+  font-size: 22px;
+  line-height: normal;
+  letter-spacing: 0.08em;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+
+  &:hover {
+    color: #4b4a4a;
+  }
+}
+
 footer {
   display: flex;
   padding: 8px 8px 24px 8px;
@@ -295,23 +307,4 @@ footer {
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-}
-
-.back-home {
-  position: absolute;
-  display: flex;
-  top: 13.5%;
-  left: -100%;
-  white-space: nowrap;
-
-  color: #706e6e;
-  font-family: 'Share Tech Mono';
-  font-size: 22px;
-  line-height: normal;
-  letter-spacing: 0.08em;
-  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
-
-  &:hover {
-    color: #4b4a4a;
-  }
 }

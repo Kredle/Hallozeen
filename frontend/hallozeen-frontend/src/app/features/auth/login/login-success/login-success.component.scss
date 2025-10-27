@@ -8,7 +8,7 @@
 }
 
 .success {
-  background-image: url('/assets/backgrounds/reg-success-bg.png');
+  background-image: url('/assets/backgrounds/login-success-bg.png');
   background-size: cover;
   background-position: center;
   color: #fff;
@@ -70,55 +70,46 @@
 }
 
 // === exact lines ===
-.the-pact {
+.login {
   @include blood-text;
   @extend .text-line;
-  font-size: 3rem;
-  left: 20%;
-  top: 14%;
+  font-size: 3.5rem;
+  left: 17%;
+  top: 5%;
 }
 
-.is-sealed {
+.completed {
   @include blood-text;
   @extend .text-line;
-  font-size: 7rem;
-  left: 50%;
-  top: 19%;
+  font-size: 1.75rem;
+  left: 13%;
+  top: 25%;
   transform: translateX(-10%); // slight push left like the mock
 }
 
-.your-name-is {
+.syncing {
   @include blood-text;
   @extend .text-line;
-  font-size: 1.5rem;
-  left: 42%;
-  top: 34%;
+  font-size: 6.75rem;
+  left: 45%;
+  top: 33%;
 }
 
-.now-written-in {
+.your-soul {
   @include blood-text;
   @extend .text-line;
-  font-size: 4.5rem;
-  left: 40%;
+  font-size: 7.5rem;
+  left: 25%;
   top: 45%;
   transform: translateX(-10%); // nudged towards center-left
 }
 
-.the-book {
+.fragments {
   @include blood-text;
   @extend .text-line;
   font-size: 3rem;
-  left: 40.8%;
-  top: 56%;
-}
-
-.of-shadows {
-  @include blood-text;
-  @extend .text-line;
-  font-size: 8rem;
   left: 65%;
-  top: 78%;
-  transform: translateX(-50%); // centered giant footer line
+  top: 80%;
 }
 
 .cta {
@@ -131,8 +122,8 @@
   align-items: center;
 
   position: absolute;
-  left: 75%;
-  top: 65%;
+  left: 25%;
+  top: 55%;
 
   border-radius: 20px;
   background: rgba(255, 255, 255, 0.06); /* чуть контрастнее стекло */

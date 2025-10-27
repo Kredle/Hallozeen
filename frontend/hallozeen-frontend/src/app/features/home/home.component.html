@@ -9,15 +9,19 @@
   <!-- холст с абсолютным позиционированием как в фигме -->
   <div class="title">
     <div class="will-you">WILL YOU</div>
-    <div class="step-inside">STEP INSIDE...</div>
+    <div class="step-inside hover-trigger">STEP INSIDE...</div>
     <div class="before">BEFORE</div>
-    <div class="the-blood">THE BLOOD</div>
+    <div class="the-blood hover-trigger">THE BLOOD</div>
     <div class="runs-dry">RUNS DRY?</div>
   </div>
 
   <!-- CTA у нижнего края -->
   <div class="cta">
     <button class="enter-btn" type="button" (click)="enterAbyssPressed()">ENTER THE ABYSS</button>
+  </div>
+
+  <div class="hover-overlay" aria-hidden="true">
+    <img class="eyes" src="/assets/svg/eyes.svg" alt="" />
   </div>
 </section>
 
@@ -27,7 +31,12 @@
   <div class="spider">
     <a href="#">
       <img class="spider-close" src="assets/svg/spider.svg" />
-      <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()"/>
+      <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()" />
+    </a>
+  </div>
+  <div class="ad">
+    <a href="ad">
+      <img src="assets/svg/ad.svg" (click)="onAdClick()" />
     </a>
   </div>
 </div>

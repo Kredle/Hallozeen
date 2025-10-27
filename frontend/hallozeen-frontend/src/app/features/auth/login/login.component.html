@@ -1,0 +1,103 @@
+<header>
+  <div class="fake-error" role="status" aria-live="polite">
+    <span class="msg">Hallozeen</span>
+    <img class="fe-icon" src="/assets/svg/bottle-tonic.svg" alt="" aria-hidden="true" />
+  </div>
+</header>
+
+<div class="form-container">
+  <a href="/">
+    <div class="back-home">
+      <img src="assets/svg/back.svg" alt="" aria-hidden="true" />
+      <span class="msg">&ensp;Flee in terror</span>
+    </div>
+  </a>
+
+  <form #loginForm="ngForm" (ngSubmit)="onLogin(loginForm)" novalidate>
+    <div class="main-header">
+      <h3>
+        STEP THROUGH THE PORTAL
+      </h3>
+    </div>
+
+    <!-- Email -->
+    <div class="form-input" [class.invalid]="emailCtrl.invalid && emailCtrl.touched">
+      <label for="email">SUMMONING CHANNEL</label>
+      <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Where our ravens will find you?"
+        [(ngModel)]="email"
+        #emailCtrl="ngModel"
+        required
+      />
+      @if (emailCtrl.touched && emailCtrl.errors?.['required']) {
+      <div class="err"><span>Email is required.</span></div>
+      }
+    </div>
+
+    <!-- Password -->
+    <div class="form-input" [class.invalid]="passwordCtrl.invalid && passwordCtrl.touched">
+      <label for="password">BINDING SPELL</label>
+      <input
+        type="password"
+        id="password"
+        name="password"
+        placeholder="Whisper it carefully... the walls listen."
+        [(ngModel)]="password"
+        #passwordCtrl="ngModel"
+        required
+        autocomplete="current-password"
+      />
+      @if (passwordCtrl.touched && passwordCtrl.errors?.['required']) {
+      <div class="err"><span>Password is required.</span></div>
+      }
+    </div>
+
+    <!-- Global login error -->
+    @if (loginFailed) {
+    <div class="err global">
+      The gate rejects your offering.<br />
+      Check your email or password.
+    </div>
+    }
+
+    <div class="form-actions">
+      <button
+        class="login-btn"
+        type="submit"
+        [disabled]="loginForm.invalid"
+        aria-disabled="{{ loginForm.invalid }}"
+      >
+        UNSEAL THE GATE
+      </button>
+
+      <button class="register-btn" type="button" (click)="navigateToRegister()">
+        OFFER YOUR SOUL
+      </button>
+    </div>
+  </form>
+</div>
+
+@if (isSubmitted) {
+<div class="web-pop-up">
+  <img class="spider-web" src="assets/svg/web-pop-up.svg" />
+  <div class="spider">
+    <a href="login/success">
+      <img class="spider-close" src="assets/svg/spider.svg" />
+      <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()" />
+    </a>
+  </div>
+  <div class="ad">
+    <a href="ad">
+      <img src="assets/svg/ad.svg" (click)="onAdClick()" />
+    </a>
+  </div>
+</div>
+}
+
+<footer>
+  By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after
+  midnight.
+</footer>

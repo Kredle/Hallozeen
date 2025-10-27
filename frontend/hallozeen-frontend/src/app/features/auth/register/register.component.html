@@ -6,6 +6,12 @@
 </header>
 
 <div class="form-container">
+  <a href="/">
+    <div class="back-home">
+      <img src="assets/svg/back.svg" alt="" aria-hidden="true" />
+      <span class="msg">&ensp;Flee in terror</span>
+    </div>
+  </a>
   <form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)" novalidate>
     <div class="main-header">
       <h3>
@@ -29,10 +35,10 @@
         (blur)="nameCtrl.control.updateValueAndValidity()"
       />
       @if (nameCtrl.touched && nameCtrl.errors) {
-        <div class="err">
-          @if (nameCtrl.errors['required']) { <span>Name is required.</span> }
-          @if (nameCtrl.errors['minlength']) { <span>At least 2 characters.</span> }
-        </div>
+      <div class="err">
+        @if (nameCtrl.errors['required']) { <span>Name is required.</span> } @if
+        (nameCtrl.errors['minlength']) { <span>At least 2 characters.</span> }
+      </div>
       }
     </div>
 
@@ -50,10 +56,10 @@
         email
       />
       @if (emailCtrl.touched && emailCtrl.errors) {
-        <div class="err">
-          @if (emailCtrl.errors['required']) { <span>Email is required.</span> }
-          @if (emailCtrl.errors['email']) { <span>Enter a valid email.</span> }
-        </div>
+      <div class="err">
+        @if (emailCtrl.errors['required']) { <span>Email is required.</span> } @if
+        (emailCtrl.errors['email']) { <span>Enter a valid email.</span> }
+      </div>
       }
     </div>
 
@@ -73,16 +79,19 @@
         autocomplete="new-password"
       />
       @if (passwordCtrl.touched && passwordCtrl.errors) {
-        <div class="err">
-          @if (passwordCtrl.errors['required']) { <span>Password is required.</span> }
-          @if (passwordCtrl.errors['minlength']) { <span>At least 8 characters.</span> }
-          @if (passwordCtrl.errors['pattern']) { <span>Use letters and numbers.</span> }
-        </div>
+      <div class="err">
+        @if (passwordCtrl.errors['required']) { <span>Password is required.</span> } @if
+        (passwordCtrl.errors['minlength']) { <span>At least 8 characters.</span> } @if
+        (passwordCtrl.errors['pattern']) { <span>Use letters and numbers.</span> }
+      </div>
       }
     </div>
 
     <!-- Repeat 1 -->
-    <div class="form-input" [class.invalid]="pass1Ctrl.touched && hasAllPasswords && !passwordsMatch">
+    <div
+      class="form-input"
+      [class.invalid]="pass1Ctrl.touched && hasAllPasswords && !passwordsMatch"
+    >
       <label for="pass-validation">REPEAT THE INCANTATION</label>
       <input
         type="password"
@@ -95,12 +104,15 @@
         autocomplete="new-password"
       />
       @if (pass1Ctrl.touched && hasAllPasswords && !passwordsMatch) {
-        <div class="err">The incantations must be identical.</div>
+      <div class="err">The incantations must be identical.</div>
       }
     </div>
 
     <!-- Repeat 2 -->
-    <div class="form-input" [class.invalid]="pass2Ctrl.touched && hasAllPasswords && !passwordsMatch">
+    <div
+      class="form-input"
+      [class.invalid]="pass2Ctrl.touched && hasAllPasswords && !passwordsMatch"
+    >
       <label for="pass-validation-2">REPEAT YOUR INCANTATION AGAIN</label>
       <input
         type="password"
@@ -113,13 +125,13 @@
         autocomplete="new-password"
       />
       @if (pass2Ctrl.touched && hasAllPasswords && !passwordsMatch) {
-        <div class="err">All three must match exactly.</div>
+      <div class="err">All three must match exactly.</div>
       }
     </div>
 
     <!-- Global mismatch -->
     @if (regForm.submitted && !passwordsMatch) {
-      <p class="err">Your spells don’t match. Try again.</p>
+    <p class="err">Your spells don’t match. Try again.</p>
     }
 
     <button
@@ -131,13 +143,7 @@
       OFFER YOUR SOUL
     </button>
   </form>
-  <button
-      class="login-btn"
-      type="button"
-      (click)="navigateToLogin()"
-    >
-      UNSEAL THE GATE
-    </button>
+  <button class="login-btn" type="button" (click)="navigateToLogin()">UNSEAL THE GATE</button>
 </div>
 
 @if (isSubmitted) {
@@ -146,8 +152,18 @@
   <div class="spider">
     <a href="register/success">
       <img class="spider-close" src="assets/svg/spider.svg" />
-      <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()"/>
+      <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()" />
+    </a>
+  </div>
+  <div class="ad">
+    <a href="ad">
+      <img src="assets/svg/ad.svg" (click)="onAdClick()" />
     </a>
   </div>
 </div>
 }
+
+<footer>
+  By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after
+  midnight.
+</footer>

@@ -7,5 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './register-success.component.scss'
 })
 export class RegisterSuccessComponent {
-
+  onNavigateToLogin(): void {
+    window.location.href = '/login';
+  }
 }

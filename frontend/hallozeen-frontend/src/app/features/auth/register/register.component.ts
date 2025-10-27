@@ -47,12 +47,15 @@ export class RegisterComponent {
   }
 
   navigateToLogin() {
-    // TODO: implement navigation to login
     window.location.href = 'login';
   }
 
   onPopupClose() {
     window.location.href = 'register/success';
     this.isSubmitted = false;
+  }
+
+  onAdClick() {
+    window.location.href = '/ad';
   }
 }

@@ -17,4 +17,8 @@ export class HomeComponent {
     this.isEntered = false;
     window.location.href = '/register';
   }
+
+  onAdClick() {
+    window.location.href = '/ad';
+  }
 }
