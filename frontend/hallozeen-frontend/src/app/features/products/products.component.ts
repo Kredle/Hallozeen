@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HallozeenApiClient } from '../../api/hallozeen-api-client';
 
 @Component({
   selector: 'app-products.component',
@@ -7,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './products.component.scss'
 })
 export class ProductsComponent {
-
+  constructor(private apiClient: HallozeenApiClient) {}
 }

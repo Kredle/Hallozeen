@@ -6,6 +6,7 @@ import { LoginComponent } from './features/auth/login/login.component';
 import { LoginSuccessComponent } from './features/auth/login/login-success/login-success.component';
 import { ProductsComponent } from './features/products/products.component';
 import { AdComponent } from './features/ad/ad.component';
+import { authGuard } from './features/auth/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -13,6 +14,6 @@ export const routes: Routes = [
   { path: 'register/success', component: RegisterSuccessComponent },
   { path: 'login', component: LoginComponent },
   { path: 'login/success', component: LoginSuccessComponent },
-  { path: 'products', component: ProductsComponent },
+  { path: 'products', component: ProductsComponent, canActivate: [authGuard] },
   { path: 'ad', component: AdComponent }
 ];

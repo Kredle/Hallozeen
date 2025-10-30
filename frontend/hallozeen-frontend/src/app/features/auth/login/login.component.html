@@ -55,14 +55,6 @@
       }
     </div>
 
-    <!-- Global login error -->
-    @if (loginFailed) {
-    <div class="err global">
-      The gate rejects your offering.<br />
-      Check your email or password.
-    </div>
-    }
-
     <div class="form-actions">
       <button
         class="login-btn"
@@ -80,14 +72,12 @@
   </form>
 </div>
 
-@if (isSubmitted) {
+@if (isSubmitted()) {
 <div class="web-pop-up">
   <img class="spider-web" src="assets/svg/web-pop-up.svg" />
   <div class="spider">
-    <a href="login/success">
       <img class="spider-close" src="assets/svg/spider.svg" />
       <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()" />
-    </a>
   </div>
   <div class="ad">
     <a href="ad">
