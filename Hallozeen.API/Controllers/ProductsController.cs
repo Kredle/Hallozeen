@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Hallozeen.API.Repositories;
 using Hallozeen.API.Data.DTO;
 using AutoMapper;
+using Hallozeen.API.Data;
+using System;
 
 namespace Hallozeen.API.Controllers
 {
@@ -21,6 +23,9 @@ namespace Hallozeen.API.Controllers
         [HttpGet]
         public async Task<ActionResult<List<ProductDto>>> GetAll()
         {
+            // Randomize cost for "Mixture of a Thousand Tasks" every time this endpoint is called
+            int mixtureCost = MixtureCostProvider.GenerateNewCost();
+
             var products = await _productRepository.GetAllAsync();
             var result = products.Select(p =>
             {
@@ -32,6 +37,10 @@ namespace Hallozeen.API.Controllers
                         dto.WeirdCostTitle = "100%";
                     else if (p.Name == "Scroll of Infinite Loop")
                         dto.WeirdCostTitle = "8/9";
+                    else if (p.Name == "Technical Toxin")
+                        dto.WeirdCostTitle = "(500/6)*0.9";
+                    else if (p.Name == "Mixture of a Thousand Tasks")
+                        dto.WeirdCostTitle = WeirdSymbolHelper.ToWeirdSymbols(mixtureCost);
                 }
                 return new ProductDto
                 {
@@ -60,6 +69,10 @@ namespace Hallozeen.API.Controllers
                     dto.WeirdCostTitle = "100%";
                 else if (product.Name == "Scroll of Infinite Loop")
                     dto.WeirdCostTitle = "8/9";
+                else if (product.Name == "Technical Toxin")
+                    dto.WeirdCostTitle = "(500/6)*0.9";
+                else if (product.Name == "Mixture of a Thousand Tasks" && MixtureCostProvider.GetCost() != null)
+                    dto.WeirdCostTitle = WeirdSymbolHelper.ToWeirdSymbols(MixtureCostProvider.GetCost()!.Value);
             }
             return Ok(new ProductDto
             {

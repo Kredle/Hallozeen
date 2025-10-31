@@ -1,21 +1,18 @@
-using Microsoft.AspNetCore.Mvc;
+using Hallozeen.API.Data;
 using Hallozeen.API.Data.DTO;
 using Hallozeen.API.Data.Models;
 using Hallozeen.API.Repositories;
-using System.Security.Claims;
-using Hallozeen.API.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Hallozeen.API.Controllers
 {
     [ApiController]
-    [Route("api/payment")]
-    public class PaymentController : ControllerBase
+    [Route("api/total")]
+    public class GrandTotalController : ControllerBase
     {
         private readonly IProductRepository _productRepository;
-        private readonly IAuthRepository _authRepository;
-        private readonly AppDbContext _db;
 
-        // Hardcoded cards
+        // Copy the hardcoded cards from PaymentController
         private static readonly List<Card> Cards = new()
         {
             new Card { Number = "4652349814587740", CVV = "004", Expiry = "10/27", Money = 20000 },
@@ -25,16 +22,21 @@ namespace Hallozeen.API.Controllers
             new Card { Number = "4580774480726981", CVV = "332", Expiry = "10/28", Money = 1500 }
         };
 
-        public PaymentController(IProductRepository productRepository, IAuthRepository authRepository, AppDbContext db)
+        public GrandTotalController(IProductRepository productRepository)
         {
             _productRepository = productRepository;
-            _authRepository = authRepository;
-            _db = db;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Pay([FromBody] PaymentRequestDto request)
+        public class GrandTotalRequestDTO
         {
+            public List<PaymentProductDto> Products { get; set; } = new();
+            public PaymentCardDto Card { get; set; } = new();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<double>> GetGrandTotal([FromBody] GrandTotalRequestDTO request)
+        {
+            // Find the card by details
             var card = Cards.FirstOrDefault(c =>
                 c.Number == request.Card.Number &&
                 c.CVV == request.Card.CVV &&
@@ -43,6 +45,7 @@ namespace Hallozeen.API.Controllers
             if (card == null)
                 return BadRequest("Invalid card");
 
+            double cardMoney = card.Money;
             double total = 0;
             foreach (var item in request.Products)
             {
@@ -56,11 +59,11 @@ namespace Hallozeen.API.Controllers
                 }
                 else if (product.Name == "Captcha of The Dead")
                 {
-                    total += card.Money * item.Quantity;
+                    total += cardMoney * item.Quantity;
                 }
                 else if (product.Name == "Scroll of Infinite Loop")
                 {
-                    total += (card.Money * 8.0 / 9.0) * item.Quantity;
+                    total += (cardMoney * 8.0 / 9.0) * item.Quantity;
                 }
                 else if (product.Name == "Technical Toxin")
                 {
@@ -70,46 +73,9 @@ namespace Hallozeen.API.Controllers
                 {
                     total += MixtureCostProvider.GetCost()!.Value * item.Quantity;
                 }
-                else
-                {
-                    return BadRequest($"Product {product.Name} has no cost and no special rule.");
-                }
             }
 
-            if (total > card.Money)
-                return BadRequest("Are you that poor?");
-
-            card.Money -= total;
-
-            var username = User.FindFirstValue(ClaimTypes.Name);
-            if (string.IsNullOrEmpty(username))
-                return Unauthorized();
-
-            var user = await _authRepository.GetUserByUsernameAsync(username);
-            if (user == null)
-                return Unauthorized();
-
-            var order = new Order
-            {
-                Id = Guid.NewGuid(),
-                UserId = user.Id,
-                OrderProducts = new List<OrderProduct>()
-            };
-
-            foreach (var item in request.Products)
-            {
-                order.OrderProducts.Add(new OrderProduct
-                {
-                    OrderId = order.Id,
-                    ProductId = item.Id,
-                    Quantity = item.Quantity
-                });
-            }
-
-            _db.Orders.Add(order);
-            await _db.SaveChangesAsync();
-
-            return Ok(new { orderId = order.Id, totalPaid = total });
+            return Ok(new { grandTotal = total });
         }
     }
 }
