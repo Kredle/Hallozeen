@@ -33,7 +33,7 @@ namespace Hallozeen.API.Controllers
             public PaymentCardDto Card { get; set; } = new();
         }
 
-        [HttpGet]
+        [HttpPost]
         public async Task<ActionResult<double>> GetGrandTotal([FromBody] GrandTotalRequestDTO request)
         {
             // Find the card by details
