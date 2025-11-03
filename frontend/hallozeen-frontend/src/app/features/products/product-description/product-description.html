@@ -1,0 +1,38 @@
+
+<div class="modal-backdrop" (click)="dismiss.emit()">
+  <div class="modal-window" (click)="$event.stopPropagation()">
+    <button type="button" class="close-btn" (click)="dismiss.emit()" aria-label="Close">
+      <img src="assets/svg/close.svg" alt="" aria-hidden="true" />
+    </button>
+
+    <div class="canvas">
+      <div class="price">
+        {{ product?.cost != null ? (product?.cost + ' soul fragments') : (product?.weirdCostTitle || '') }}
+        <img class="skull" src="assets/svg/white_skull.svg" alt="" aria-hidden="true" />
+      </div>
+
+      <div class="tagline">One payment, eternal consequences.</div>
+
+      <h2 class="title">{{ product?.name }}</h2>
+
+      <img class="image" [src]="product?.imageUrl || ''" [alt]="product?.name || 'Product'" />
+
+      @if (!product?.description) {
+        <p class="desc">No description available. But trust us, it's cursed.</p>
+      }
+      
+      <p class="desc">{{ product?.description }}</p>
+
+      <button type="button" class="cta">ACCEPT THE CURSE</button>
+
+      <!-- Decorative assets (optional) -->
+      <img class="web-2" src="assets/svg/web-2.svg" alt="" aria-hidden="true" />
+      <img class="web-3" src="assets/svg/web-3.svg" alt="" aria-hidden="true" />
+      <img class="web-5" src="assets/svg/web-5.svg" alt="" aria-hidden="true" />
+      <img class="spider-1" src="assets/svg/spider-3.svg" alt="" aria-hidden="true" />
+      <img class="spider-2" src="assets/svg/spider-3.svg" alt="" aria-hidden="true" />
+      <img class="spider-3" src="assets/svg/spider-3.svg" alt="" aria-hidden="true" />
+      <img class="spider-4" src="assets/svg/spider-3.svg" alt="" aria-hidden="true" />
+    </div>
+  </div>
+</div>

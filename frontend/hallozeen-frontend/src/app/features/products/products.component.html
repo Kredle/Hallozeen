@@ -1,1 +1,41 @@
-<p>products.component works!</p>
+<header>
+  <div class="fake-error" role="status" aria-live="polite">
+    <span class="msg">Hallozeen</span>
+    <img class="fe-icon" src="/assets/svg/bottle-tonic.svg" alt="" aria-hidden="true" />
+  </div>
+</header>
+
+<div class="content">
+  <div class="toolbar" role="navigation">
+    <a href="/" class="back-link" aria-label="Back to home">
+      <div class="back-home">
+        <img src="assets/svg/back.svg" alt="" aria-hidden="true" />
+        <span class="msg">&ensp;Flee in terror</span>
+      </div>
+    </a>
+    <button type="button" class="cart-btn" aria-label="Shopping bag">
+      <img class="cart-icon" src="assets/svg/shopping-bag.svg" alt="" aria-hidden="true" />
+    </button>
+  </div>
+
+  <div class="prod-header">
+    <p>Totally Safe Potions (Trust Us)</p>
+  </div>
+
+  @if (!products?.length) { <div style="color:#ccc">No products loaded</div> }
+
+  <div class="prod-list">
+    @for (p of products; track $index; let i = $index) {
+      <app-product-card [ngClass]="'item-' + (i + 1)" [product]="p" (click)="openProduct(p)"></app-product-card>
+    }
+  </div>
+
+  @if (showModal && selectedProduct) {
+    <app-product-description [product]="selectedProduct" (dismiss)="closeModal()"></app-product-description>
+  }
+</div>
+
+<footer>
+  By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after
+  midnight.
+</footer>

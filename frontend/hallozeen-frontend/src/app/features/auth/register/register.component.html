@@ -12,6 +12,7 @@
       <span class="msg">&ensp;Flee in terror</span>
     </div>
   </a>
+  <div class="form-card">
   <form #regForm="ngForm" (ngSubmit)="onSubmit(regForm)" novalidate>
     <div class="main-header">
       <h3>
@@ -134,19 +135,34 @@
     <p class="err">Your spells don’t match. Try again.</p>
     }
 
+    @if (registerFailed() && errorMessages().length) {
+    <div class="server-errors" role="alert" aria-live="assertive">
+      @if (errorMessages().length === 1) {
+        <span>{{ errorMessages()[0] }}</span>
+      } @else {
+        <ul>
+          @for (msg of errorMessages(); track $index) {
+            <li>{{ msg }}</li>
+          }
+        </ul>
+      }
+    </div>
+    }
+
     <button
       class="register-btn"
       type="submit"
-      [disabled]="regForm.invalid || !passwordsMatch"
-      aria-disabled="{{ regForm.invalid || !passwordsMatch }}"
+      [disabled]="regForm.invalid || !passwordsMatch || isLoading()"
+      aria-disabled="{{ regForm.invalid || !passwordsMatch || isLoading() }}"
     >
       OFFER YOUR SOUL
     </button>
   </form>
   <button class="login-btn" type="button" (click)="navigateToLogin()">UNSEAL THE GATE</button>
+  </div>
 </div>
 
-@if (isSubmitted) {
+@if (isSubmitted()) {
 <div class="web-pop-up">
   <img class="spider-web" src="assets/svg/web-pop-up.svg" />
   <div class="spider">

@@ -1,0 +1,119 @@
+.item {
+  display: flex;
+  width: 350px;
+  padding: 60px;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+  border-radius: 20px;
+  background: var(--glass, rgba(255, 255, 255, 0));
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  -webkit-backdrop-filter: blur(12px) saturate(140%);
+  backdrop-filter: blur(12px) saturate(110%);
+  transition: transform 300ms ease, background 200ms ease, box-shadow 200ms ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 20px 0 rgba(38, 231, 96, 0.8);
+
+    // fully flip card vertically
+    transform: rotateX(180deg);
+  }
+
+  // on select, unflip and make gradient background
+  &.is-selected {
+    transform: rotateX(0deg);
+    background: var(--theme-gradient-1, linear-gradient(135deg, #8B1FB8 0%, #04DB73 100%));
+  }
+}
+
+.product-name {
+  color: #04db73;
+  text-align: center;
+
+  /* H3 */
+  font-family: 'Share Tech Mono';
+  font-size: 28px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  margin-top: 2rem;
+}
+
+.price {
+  display: flex;
+  flex-direction: row; /* price text and skull on one line */
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  align-self: auto; /* do not stretch — keep centered */
+  color: var(--grey, #797979); /* unify color for price row */
+}
+
+.price-text {
+  color: var(--grey, #797979);
+  text-align: center;
+
+  /* body */
+  font-family: 'Share Tech Mono';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.skull {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  padding: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Tint the white skull to the same grey as text */
+.skull img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: grayscale(1) brightness(50%);
+}
+
+.add-to-cart-btn {
+  display: flex;
+  padding: 24px;
+  margin-top: 24px;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06); /* чуть контрастнее стекло */
+
+  color: var(--grey, #706e6e);
+
+  /* cta */
+  font-family: 'Share Tech Mono';
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+
+  cursor: pointer;
+
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 150ms ease, background 150ms ease, color 150ms ease;
+
+  /* make the button a bit wider without stretching full width */
+  min-width: 220px;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  &:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.12);
+    color: #a19f9f;
+  }
+}

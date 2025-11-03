@@ -55,6 +55,20 @@
       }
     </div>
 
+    @if (loginFailed() && errorMessages().length) {
+    <div class="server-errors" role="alert" aria-live="assertive">
+      @if (errorMessages().length === 1) {
+        <span>{{ errorMessages()[0] }}</span>
+      } @else {
+        <ul>
+          @for (msg of errorMessages(); track $index) {
+            <li>{{ msg }}</li>
+          }
+        </ul>
+      }
+    </div>
+    }
+
     <div class="form-actions">
       <button
         class="login-btn"
