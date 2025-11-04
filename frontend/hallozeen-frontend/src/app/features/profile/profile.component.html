@@ -1,0 +1,100 @@
+<section class="profile">
+  <header>
+    <div class="fake-error" role="status" aria-live="polite">
+      <span class="msg">Hallozeen</span>
+      <img class="fe-icon" src="/assets/svg/bottle-tonic.svg" alt="" aria-hidden="true" />
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="toolbar" role="navigation">
+      <a href="/products" class="back-link" aria-label="Back to home">
+        <div class="back-home">
+          <img src="assets/svg/back.svg" alt="" aria-hidden="true" />
+          <span class="msg">&ensp;Flee in terror</span>
+        </div>
+      </a>
+      <div class="right-actions">
+        <button type="button" class="cart-btn" aria-label="Shopping bag" (click)="goToCart()">
+          <img class="cart-icon" src="assets/svg/shopping-bag.svg" alt="" aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+    <div class="layout">
+      <nav class="sidebar" aria-label="Profile sections">
+        <button class="tab" [class.active]="activeTab==='details'" (click)="setTab('details')">MORTAL DETAILS</button>
+        <button class="tab" [class.active]="activeTab==='orders'" (click)="setTab('orders')">SEALED PACTS</button>
+      </nav>
+
+      <section class="panel" aria-live="polite">
+        @if (activeTab==='details') {
+          <h1 class="title">Your Mortal Details</h1>
+          <div class="grid-form">
+            <div class="field">
+              <label>YOUR FIRST MORTAL NAME</label>
+              <div class="box">{{ user?.username || '—' }}</div>
+            </div>
+            <div class="field">
+              <label>SUMMONING CHANNEL</label>
+              <div class="box">{{ user?.email || '—' }}</div>
+            </div>
+          </div>
+        } @else {
+          <h1 class="title">Sealed Pacts</h1>
+          @if (loadingOrders) {
+            <div class="loading">Calling spirits to fetch orders...</div>
+          } @else if (errorOrders) {
+            <div class="error">{{ errorOrders }}</div>
+          } @else if (!orders.length) {
+            <div class="empty">No orders yet.</div>
+          } @else {
+            <ul class="order-list" [class.scrollable]="orders.length > 6">
+              @for (o of orders; track $index) {
+                <li class="order-item">
+                  <button class="id-btn" (click)="toggleOrder(o)">
+                    <span class="id">Your order id: {{ (o?.id || o?.orderId || o) }}</span>
+                    <img class="chev" src="/assets/svg/chevron.svg" [class.expanded]="isExpanded(o)" alt="" aria-hidden="true" />
+                  </button>
+                  @if (o?.createdAt || o?.date) {
+                    <span class="date">{{ o?.createdAt || o?.date }}</span>
+                  }
+
+                  @if (isExpanded(o)) {
+                    <div class="order-details">
+                      @if (isLoading(o)) {
+                        <div class="loading">Summoning pact details...</div>
+                      } @else {
+                      <div class="summary-row">
+                        <div class="addr">
+                          13 Cobweb Lane, Hollow’s End, Dreadvale, 8888<br/>
+                          {{ user?.username || '—' }}
+                        </div>
+                      </div>
+                      @if (productsOf(details[orderIdOf(o)]).length) {
+                        <ul class="prod-list">
+                          @for (p of productsOf(details[orderIdOf(o)]); track $index) {
+                            <li class="prod-row">
+                              <span class="p-name">{{ p?.name || ('Product #' + (p?.productId || p?.id || '?')) }}</span>
+                              @if (p?.quantity || p?.qty) { <span class="p-qty">{{ (p?.quantity || p?.qty) | number: '2.0-0' }} bottle</span> }
+                            </li>
+                          }
+                        </ul>
+                      } @else {
+                        <pre class="raw">{{ (details[orderIdOf(o)] | json) }}</pre>
+                      }
+                      }
+                    </div>
+                  }
+                </li>
+              }
+            </ul>
+          }
+        }
+      </section>
+    </div>
+  </div>
+
+  <footer>
+    By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after midnight.
+  </footer>
+</section>
