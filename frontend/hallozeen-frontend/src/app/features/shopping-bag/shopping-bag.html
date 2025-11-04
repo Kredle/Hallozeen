@@ -1,0 +1,94 @@
+<header>
+  <div class="fake-error" role="status" aria-live="polite">
+    <span class="msg">Hallozeen</span>
+    <img class="fe-icon" src="/assets/svg/bottle-tonic.svg" alt="" aria-hidden="true" />
+  </div>
+</header>
+
+<div class="content">
+  <div class="toolbar" role="navigation">
+    <a href="/products" class="back-link" aria-label="Back to products">
+      <div class="back-home">
+        <img src="assets/svg/back.svg" alt="" aria-hidden="true" />
+        <span class="msg">&ensp;Flee in terror</span>
+      </div>
+    </a>
+    <button type="button" class="profile-btn" aria-label="Profile" (click)="goProfile()">
+      <img src="/assets/svg/profile.svg" alt="" aria-hidden="true" />
+    </button>
+  </div>
+
+  @if (items.length) {
+    <div class="inventory-header">
+      <h1 class="bag-title">Inventory of the Damned</h1>
+      <p class="bag-subtitle">The spirits hum approvingly — these artifacts are nearly yours</p>
+    <div class="action-bar">
+      <button type="button" class="cta fetch-btn" (click)="goToProducts()">Fetch Fresh Ingredients</button>
+      <button type="button" class="cta secondary" (click)="bottleItUp()">Bottle It Up</button>
+    </div>
+  </div>
+  }
+
+  @if (!items.length) {
+    <section class="empty-state" aria-live="polite">
+      <h1 class="title">
+        <span>No cursed brews whisper your name yet.</span>
+        <span class="subtitle">The silence is unsettling</span>
+      </h1>
+      <button type="button" class="cta" (click)="goToProducts()">Fetch Fresh Ingredients</button>
+
+      <!-- Decorative placeholders (user will add assets/styles) -->
+      <div class="decor web-top-right" aria-hidden="true"></div>
+      <div class="decor web-bottom-left" aria-hidden="true"></div>
+      <div class="decor spider-top-right" aria-hidden="true"></div>
+      <div class="decor spider-bottom-right" aria-hidden="true"></div>
+    </section>
+  }
+
+  @if (items.length) {
+    <section class="bag-state">
+      <div class="bag-scroll" [class.scrollable]="items.length > 5">
+      <ul class="bag-list" aria-label="Shopping bag items">
+        @for (x of items; track $index) {
+          <li class="bag-row">
+            <div class="row-price">
+              <img class="skull" src="assets/svg/white_skull.svg" alt="" aria-hidden="true" />
+              <span class="price-text">{{ x.cost != null ? (x.cost + ' soul fragments') : (x.weirdCostTitle || '???') }}</span>
+            </div>
+
+            <div class="qty-box" role="group" aria-label="Quantity controls">
+              <button type="button" class="qty-btn" (click)="dec(x)" aria-label="Decrease quantity">−</button>
+              <span class="qty-val">{{ (x.quantity < 10 ? '0' : '') + x.quantity }}</span>
+              <button type="button" class="qty-btn" (click)="inc(x)" aria-label="Increase quantity">+</button>
+              <button type="button" class="remove-btn" (click)="remove(x)" aria-label="Remove item">
+                <img src="assets/svg/clear.svg" alt="" aria-hidden="true" />
+              </button>
+            </div>
+
+            <div class="name">{{ x.name || ('Product #' + x.productId) }}</div>
+
+            <div class="thumb" *ngIf="x.imageUrl as src">
+              <img [src]="src" [alt]="x.name || 'Product'" />
+            </div>
+          </li>
+        }
+      </ul>
+      </div>
+
+      <div class="grand-total" [class.pending]="!cardEntered">
+        <span class="label">Grand total:</span>
+        @if (!cardEntered) {
+          <span class="value">???</span>
+        } @else {
+          <span class="value">{{ total }} soul fragments</span>
+          <img class="skull" src="assets/svg/white_skull.svg" alt="" aria-hidden="true" />
+          @if (hasUnknown) { <span class="note"> + variable items at checkout</span> }
+        }
+      </div>
+    </section>
+  }
+</div>
+
+<footer>
+  By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after midnight.
+</footer>

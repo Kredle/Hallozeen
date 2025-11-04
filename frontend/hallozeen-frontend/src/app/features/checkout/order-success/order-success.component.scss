@@ -1,0 +1,218 @@
+:host,
+.order-success {
+  min-height: 100dvh;
+  min-width: 100vw;
+  display: grid;
+  grid-template-rows: auto 1fr auto auto; /* header | content | actions | legal footer */
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+    url('/assets/backgrounds/bg-order-success.png');
+  background-size: cover;
+  background-position: center;
+  color: #fff;
+}
+
+.fake-error {
+  position: absolute;
+  inset: 14px 0 auto 0;
+  display: flex;
+  justify-content: center;
+  align-items: baseline;
+  gap: 0.5rem;
+  white-space: nowrap;
+  color: #706e6e;
+  font-family: 'Share Tech Mono';
+  font-size: 28px;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.35);
+}
+
+.title {
+  font-family: 'Share Tech Mono';
+  font-size: clamp(28px, 5vw, 56px);
+  margin: 0 0 8px 0;
+}
+.title.error {
+  color: #ff6464;
+}
+.title.sealed {
+  color: var(--purple, #8b1fb8);
+  text-align: center;
+  font-size: clamp(40px, 7vw, 84px);
+}
+
+.subtitle {
+  font-family: 'Share Tech Mono';
+  color: #a5a3a3;
+  margin: 0 0 6px 0;
+}
+
+.order-id {
+  display: inline-block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #04db73;
+  font-family: 'Share Tech Mono';
+}
+
+.error-box {
+  max-width: 700px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  border: 1px solid rgba(184, 56, 56, 0.35);
+  background: rgba(184, 56, 56, 0.08);
+  color: #ffb3b3;
+  font-family: 'Share Tech Mono';
+}
+
+.cta {
+  margin-top: 24px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--grey, #706e6e);
+  font-family: 'Share Tech Mono';
+  font-size: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 16px 24px;
+  cursor: pointer;
+}
+.cta:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Keep button look consistent with checkout */
+.cta.seal {
+  display: inline-flex;
+  padding: 20px;
+  justify-content: center;
+  align-items: center;
+  min-width: 220px;
+}
+.cta.fetch-btn {
+  padding: 20px;
+  background: transparent;
+  color: var(--grey, #706e6e);
+  border: none;
+}
+.cta.fetch-btn:hover {
+  box-shadow: 0 0 20px 0 rgba(38, 231, 96, 0.8);
+}
+
+.content {
+  display: grid;
+  place-items: center;
+  text-align: center;
+  padding: 24px;
+  margin-top: 16vh; /* position copy like in the mock */
+}
+.order-line {
+  margin: 8px 0 6px;
+  font-family: 'Share Tech Mono';
+  color: #a5a3a3;
+}
+.desc {
+  max-width: 350px;
+  text-align: center;
+  color: var(--grey, #706e6e);
+  font-family: 'Share Tech Mono';
+}
+
+header {
+  position: relative;
+}
+.profile-btn {
+  position: absolute;
+  right: 7%;
+  top: 50px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.profile-btn img {
+  width: 44px;
+  height: 44px;
+  filter: drop-shadow(0 1px 0 rgba(0, 0, 0, 0.25));
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-row: 3;
+  width: 100%;
+  padding: 16px 32px 0;
+}
+
+.page-footer {
+  grid-row: 4;
+  padding: 8px 8px 24px 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--grey, #706e6e);
+  font-family: 'Share Tech Mono';
+  font-size: 14px;
+}
+
+/* === POPUP (same as login/register/checkout) === */
+.web-pop-up {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 50;
+}
+.ad {
+  position: absolute;
+  overflow: visible;
+  z-index: 100;
+  pointer-events: auto;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}
+.spider-web {
+  width: min(85vw, 1000px);
+  height: auto;
+  max-height: 90vh;
+  object-fit: contain;
+  position: relative;
+}
+.spider {
+  position: absolute;
+  right: 11%;
+  left: 72%;
+  bottom: 9.91%;
+  top: 81%;
+  transform: translate(-45.23px, -96.26px);
+  overflow: visible;
+  width: clamp(70px, 8vw, 110px);
+  aspect-ratio: 1;
+  pointer-events: auto;
+}
+.spider-close {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+.close {
+  position: absolute;
+  top: 40%;
+  left: 60%;
+  transform: translate(-50%, -50%) scale(0.9);
+  width: 55%;
+  aspect-ratio: 1;
+  object-fit: contain;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+.close:hover {
+  transform: translate(-50%, -50%) scale(1.05);
+}

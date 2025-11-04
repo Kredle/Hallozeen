@@ -1,0 +1,100 @@
+<header>
+  <div class="fake-error" role="status" aria-live="polite">
+    <span class="msg">Hallozeen</span>
+    <img class="fe-icon" src="/assets/svg/bottle-tonic.svg" alt="" aria-hidden="true" />
+  </div>
+</header>
+
+<div class="content">
+  <div class="toolbar" role="navigation">
+    <a href="/shopping-bag" class="back-link" aria-label="Back to bag">
+      <div class="back-home">
+        <img src="assets/svg/back.svg" alt="" aria-hidden="true" />
+        <span class="msg">&ensp;Flee in terror</span>
+      </div>
+    </a>
+
+    <button type="button" class="profile-btn" aria-label="Profile" (click)="goProfile()">
+      <img src="/assets/svg/profile.svg" alt="" aria-hidden="true" />
+    </button>
+  </div>
+
+  <h1 class="page-title">The Final Summoning</h1>
+
+  <div class="grid">
+    <!-- Left: payment form -->
+    <section class="left">
+      <button type="button" class="cta seal" (click)="sealThePact()">SEAL THE PACT</button>
+
+      <p class="lead">
+        You've gathered the ingredients — now perform the final rite.
+        Once the pact is sealed, there's no undo.
+      </p>
+
+      <label class="field">Card number
+        <input class="input" placeholder="0000 0000 0000 0000" [(ngModel)]="card.number" (ngModelChange)="onCardChanged()" name="cardNumber" inputmode="numeric" autocomplete="cc-number" />
+      </label>
+
+      <div class="row">
+        <label class="field">Expiration date
+          <input class="input" placeholder="MM/YY" [(ngModel)]="card.expiry" (ngModelChange)="onCardChanged()" name="cardExpiry" maxlength="5" inputmode="numeric" autocomplete="cc-exp" />
+        </label>
+        <label class="field">CVV2
+          <input class="input" placeholder="***" [(ngModel)]="card.cvv" (ngModelChange)="onCardChanged()" name="cardCvv" maxlength="3" inputmode="numeric" autocomplete="cc-csc" />
+        </label>
+      </div>
+
+      <button type="button" class="cta fetch-btn" (click)="cancel()">CALL IT OFF</button>
+    </section>
+
+    <!-- Right: order summary -->
+    <section class="right">
+      <div class="grand">
+        <span class="label">Grand total:</span>
+        @if (grandTotal === null) {
+          <span class="value">???</span>
+        } @else {
+          <span class="value">{{ grandTotal }}</span>
+        }
+      </div>
+
+      <div class="summary-scroll" [class.scrollable]="items.length > 1">
+        <div class="summary-vertical" aria-label="Order summary">
+          @for (x of items; track $index) {
+            <div class="item-block">
+              <img class="thumb" [src]="x.imageUrl || ''" [alt]="x.name || 'Item'" />
+              <div class="qty">{{ (x.quantity < 10 ? '0' : '') + x.quantity }} bottle</div>
+              <div class="name">{{ x.name || ('Product #' + x.productId) }}</div>
+            </div>
+          }
+
+          <div class="address">
+            13 Cobweb Lane, Hollow’s End,<br />
+            Dreadvale, 8888
+          </div>
+          <div class="email">{{ userEmail || "its@hallowzeen.com" }}</div>
+          <div class="username">{{ username || "John Wayne" }}</div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+@if (isSubmitted) {
+<div class="web-pop-up">
+  <img class="spider-web" src="assets/svg/web-pop-up.svg" />
+  <div class="spider">
+      <img class="spider-close" src="assets/svg/spider.svg" />
+      <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()" />
+  </div>
+  <div class="ad">
+    <a href="ad">
+      <img src="assets/svg/ad.svg" (click)="onAdClick()" />
+    </a>
+  </div>
+</div>
+}
+
+<footer>
+  By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after midnight.
+</footer>

@@ -26,6 +26,28 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    if (!token) return false;
+    return !this.isTokenExpired(token);
+  }
+
+  isTokenExpired(token?: string | null): boolean {
+    try {
+      const t = token ?? this.getToken();
+      if (!t) return true;
+      const parts = t.split('.');
+      if (parts.length < 2) return true;
+      const b64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
+      const json = atob(padded);
+      const payload = JSON.parse(json);
+      const exp = Number(payload?.exp);
+      if (!exp) return true;
+      const now = Math.floor(Date.now() / 1000);
+      const skew = 5; // seconds skew
+      return now >= (exp - skew);
+    } catch {
+      return true;
+    }
   }
 }

@@ -5,8 +5,12 @@ import { RegisterSuccessComponent } from './features/auth/register/register-succ
 import { LoginComponent } from './features/auth/login/login.component';
 import { LoginSuccessComponent } from './features/auth/login/login-success/login-success.component';
 import { ProductsComponent } from './features/products/products.component';
+import { ShoppingBag } from './features/shopping-bag/shopping-bag';
+import { CheckoutComponent } from './features/checkout/checkout';
+import { OrderSuccessComponent } from './features/checkout/order-success/order-success.component';
 import { AdComponent } from './features/ad/ad.component';
 import { authGuard } from './features/auth/auth.guard';
+import { ProfileComponent } from './features/profile/profile.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,5 +19,9 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'login/success', component: LoginSuccessComponent },
   { path: 'products', component: ProductsComponent, canActivate: [authGuard] },
+  { path: 'shopping-bag', component: ShoppingBag, canActivate: [authGuard] },
+  { path: 'checkout', component: CheckoutComponent, canActivate: [authGuard] },
+  { path: 'order/success', component: OrderSuccessComponent, canActivate: [authGuard] },
+  { path: 'profile', component: ProfileComponent, canActivate: [authGuard] },
   { path: 'ad', component: AdComponent }
 ];

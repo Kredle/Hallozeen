@@ -26,18 +26,23 @@ export interface IHallozeenApiClient {
      */
     register(body: RegisterRequestDTO | undefined): Observable<void>;
     /**
+     * @param body (optional) 
+     * @return OK
+     */
+    total(body: GrandTotalRequestDTO | undefined): Observable<number>;
+    /**
      * @return OK
      */
     ordersAll(): Observable<any[]>;
     /**
      * @return OK
      */
-    orders(id: string): Observable<void>;
+    orders(id: string): Observable<any>;
     /**
      * @param body (optional) 
      * @return OK
      */
-    payment(body: PaymentRequestDto | undefined): Observable<void>;
+    payment(body: PaymentRequestDto | undefined): Observable<string>;
     /**
      * @return OK
      */
@@ -115,10 +120,37 @@ export class HallozeenApiClient implements IHallozeenApiClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            let result200: any = null;
-            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-            result200 = resultData200 as { token: string };
-            return _observableOf(result200);
+                let token: string | undefined;
+                // Try Authorization header first
+                try {
+                    const authHeader = (response as any).headers?.get('Authorization') || (response as any).headers?.get('authorization');
+                    if (authHeader && typeof authHeader === 'string') {
+                        token = authHeader.replace(/^Bearer\s+/i, '').trim();
+                    }
+                } catch { /* ignore */ }
+
+                if (!token) {
+                    // Try parse JSON body { token: "..." } or plain string
+                    try {
+                        const data = _responseText ? JSON.parse(_responseText) : undefined;
+                        if (data && typeof data === 'object' && typeof (data as any).token === 'string') {
+                            token = (data as any).token;
+                        } else if (typeof data === 'string') {
+                            token = data;
+                        }
+                    } catch {
+                        if (_responseText && typeof _responseText === 'string' && _responseText.trim()) {
+                            token = _responseText.trim();
+                        }
+                    }
+                }
+
+                if (!token) {
+                    // Surface as an error to the caller
+                    return throwException("Login response missing token.", status, _responseText, _headers);
+                }
+
+                return _observableOf({ token } as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -173,6 +205,65 @@ export class HallozeenApiClient implements IHallozeenApiClient {
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
             return _observableOf(null as any);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf(null as any);
+    }
+
+    /**
+     * @param body (optional) 
+     * @return OK
+     */
+    total(body: GrandTotalRequestDTO | undefined): Observable<number> {
+        let url_ = this.baseUrl + "/api/total";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_ : any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            })
+        };
+
+        return _observableFrom(this.transformOptions(options_)).pipe(_observableMergeMap(transformedOptions_ => {
+            return this.http.request("post", url_, transformedOptions_);
+        })).pipe(_observableMergeMap((response_: any) => {
+            return this.processTotal(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processTotal(response_ as any);
+                } catch (e) {
+                    return _observableThrow(e) as any as Observable<number>;
+                }
+            } else
+                return _observableThrow(response_) as any as Observable<number>;
+        }));
+    }
+
+    protected processTotal(response: HttpResponseBase): Observable<number> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+            (response as any).error instanceof Blob ? (response as any).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
+            let result200: any = null;
+            let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = resultData200 !== undefined ? resultData200 : null as any;
+    
+            return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -245,7 +336,7 @@ export class HallozeenApiClient implements IHallozeenApiClient {
     /**
      * @return OK
      */
-    orders(id: string): Observable<void> {
+    orders(id: string): Observable<any> {
         let url_ = this.baseUrl + "/api/orders/{id}";
         if (id === undefined || id === null)
             throw new globalThis.Error("The parameter 'id' must be defined.");
@@ -268,14 +359,14 @@ export class HallozeenApiClient implements IHallozeenApiClient {
                 try {
                     return this.processOrders(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<any>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<any>;
         }));
     }
 
-    protected processOrders(response: HttpResponseBase): Observable<void> {
+    protected processOrders(response: HttpResponseBase): Observable<any> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -284,7 +375,12 @@ export class HallozeenApiClient implements IHallozeenApiClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
+                try {
+                    const data = _responseText ? JSON.parse(_responseText) : undefined;
+                    return _observableOf(data as any);
+                } catch {
+                    return _observableOf(_responseText as any);
+                }
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -298,7 +394,7 @@ export class HallozeenApiClient implements IHallozeenApiClient {
      * @param body (optional) 
      * @return OK
      */
-    payment(body: PaymentRequestDto | undefined): Observable<void> {
+    payment(body: PaymentRequestDto | undefined): Observable<string> {
         let url_ = this.baseUrl + "/api/payment";
         url_ = url_.replace(/[?&]$/, "");
 
@@ -322,14 +418,14 @@ export class HallozeenApiClient implements IHallozeenApiClient {
                 try {
                     return this.processPayment(response_ as any);
                 } catch (e) {
-                    return _observableThrow(e) as any as Observable<void>;
+                    return _observableThrow(e) as any as Observable<string>;
                 }
             } else
-                return _observableThrow(response_) as any as Observable<void>;
+                return _observableThrow(response_) as any as Observable<string>;
         }));
     }
 
-    protected processPayment(response: HttpResponseBase): Observable<void> {
+    protected processPayment(response: HttpResponseBase): Observable<string> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -338,7 +434,26 @@ export class HallozeenApiClient implements IHallozeenApiClient {
         let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); }}
         if (status === 200) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
-            return _observableOf(null as any);
+                let orderId: string | undefined;
+                // Try parse as JSON { orderId: "..." } or string GUID
+                try {
+                    const data = _responseText ? JSON.parse(_responseText) : undefined;
+                    if (data && typeof data === 'object') {
+                        const candidate = (data as any).orderId ?? (data as any).id ?? (data as any).orderID;
+                        if (typeof candidate === 'string') orderId = candidate;
+                    } else if (typeof data === 'string') {
+                        orderId = data;
+                    }
+                } catch {
+                    if (_responseText && typeof _responseText === 'string' && _responseText.trim()) {
+                        orderId = _responseText.trim();
+                    }
+                }
+
+                if (!orderId) {
+                    return throwException("Payment response missing orderId.", status, _responseText, _headers);
+                }
+                return _observableOf(orderId as any);
             }));
         } else if (status !== 200 && status !== 204) {
             return blobToText(responseBlob).pipe(_observableMergeMap((_responseText: string) => {
@@ -516,6 +631,54 @@ export class HallozeenApiClient implements IHallozeenApiClient {
         }
         return _observableOf(null as any);
     }
+}
+
+export class GrandTotalRequestDTO implements IGrandTotalRequestDTO {
+    products?: PaymentProductDto[] | undefined;
+    card?: PaymentCardDto;
+
+    constructor(data?: IGrandTotalRequestDTO) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (this as any)[property] = (data as any)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["products"])) {
+                this.products = [] as any;
+                for (let item of _data["products"])
+                    this.products!.push(PaymentProductDto.fromJS(item));
+            }
+            this.card = _data["card"] ? PaymentCardDto.fromJS(_data["card"]) : undefined as any;
+        }
+    }
+
+    static fromJS(data: any): GrandTotalRequestDTO {
+        data = typeof data === 'object' ? data : {};
+        let result = new GrandTotalRequestDTO();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.products)) {
+            data["products"] = [];
+            for (let item of this.products)
+                data["products"].push(item ? item.toJSON() : undefined as any);
+        }
+        data["card"] = this.card ? this.card.toJSON() : undefined as any;
+        return data;
+    }
+}
+
+export interface IGrandTotalRequestDTO {
+    products?: PaymentProductDto[] | undefined;
+    card?: PaymentCardDto;
 }
 
 export class LoginRequestDTO implements ILoginRequestDTO {

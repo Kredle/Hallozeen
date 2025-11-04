@@ -13,16 +13,21 @@
         <span class="msg">&ensp;Flee in terror</span>
       </div>
     </a>
-    <button type="button" class="cart-btn" aria-label="Shopping bag">
-      <img class="cart-icon" src="assets/svg/shopping-bag.svg" alt="" aria-hidden="true" />
-    </button>
+    <div class="right-actions">
+      <button type="button" class="cart-btn" aria-label="Shopping bag" (click)="goToCart()">
+        <img class="cart-icon" src="assets/svg/shopping-bag.svg" alt="" aria-hidden="true" />
+      </button>
+      <button type="button" class="profile-btn" aria-label="Profile" (click)="goProfile()">
+        <img src="/assets/svg/profile.svg" alt="" aria-hidden="true" />
+      </button>
+    </div>
   </div>
 
   <div class="prod-header">
     <p>Totally Safe Potions (Trust Us)</p>
   </div>
 
-  @if (!products?.length) { <div style="color:#ccc">No products loaded</div> }
+  @if (!products.length) { <div class="no-data">No products loaded</div> }
 
   <div class="prod-list">
     @for (p of products; track $index; let i = $index) {

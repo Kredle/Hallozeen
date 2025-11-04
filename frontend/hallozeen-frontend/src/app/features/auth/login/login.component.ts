@@ -69,7 +69,7 @@ export class LoginComponent {
       msgs.push(String((err as any).message));
     }
     if (msgs.length === 0) msgs.push('Login failed. Please check your credentials.');
-    return Array.from(new Set(msgs.map(s => s.trim()).filter(Boolean)));
+    return Array.from(new Set(msgs.map((s) => s.trim()).filter(Boolean)));
   }
 
   private tryParseJson(text: string): any | null {

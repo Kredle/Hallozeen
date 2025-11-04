@@ -1,0 +1,49 @@
+<section class="order-success">
+  <header>
+    <div class="fake-error">
+      <span class="msg">Hallozeen</span>
+      <img class="fe-icon" src="/assets/svg/bottle-tonic.svg" alt="" aria-hidden="true" />
+    </div>
+    <button class="profile-btn" (click)="goProfile()" aria-label="Profile">
+      <img src="/assets/svg/profile.svg" alt="" aria-hidden="true" />
+    </button>
+  </header>
+
+  <main class="content">
+    @if (!error && orderId) {
+      <h1 class="title sealed">The Pact Is Sealed</h1>
+      <div class="order-line">Your order id: <span class="order-id">{{ orderId }}</span></div>
+      <p class="desc">
+        Your offering has been accepted. Expect eerie noises near your door soon. The spirits thank you — and so does our logistics department.
+      </p>
+    } @else if (error) {
+      <h1 class="title error">The Pact Was Rejected</h1>
+      <div class="error-box">{{ error }}</div>
+    } @else {
+      <h1 class="title">No order data</h1>
+      <p class="desc">Return to products and try again.</p>
+    }
+  </main>
+
+  <footer class="actions">
+    <button type="button" class="cta seal" (click)="onBackToProducts()">BACK TO THE REALM</button>
+    <button type="button" class="cta fetch-btn" (click)="onBackHome()">Back to the Realm</button>
+  </footer>
+
+  @if (isSubmitted) {
+  <div class="web-pop-up">
+    <img class="spider-web" src="assets/svg/web-pop-up.svg" />
+    <div class="spider">
+        <img class="spider-close" src="assets/svg/spider.svg" />
+        <img class="close" src="assets/svg/close.svg" (click)="onPopupClose()" />
+    </div>
+    <div class="ad">
+      <a href="ad">
+        <img src="assets/svg/ad.svg" (click)="onAdClick()" />
+      </a>
+    </div>
+  </div>
+  }
+
+  <div class="page-footer">By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after midnight.</div>
+</section>

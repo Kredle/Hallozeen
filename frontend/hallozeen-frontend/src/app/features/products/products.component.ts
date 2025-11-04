@@ -1,4 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { HallozeenApiClient, ProductDto } from '../../api/hallozeen-api-client';
 import { ProductCardComponent } from "./product-card/product-card.component";
@@ -16,7 +17,7 @@ export class ProductsComponent implements OnInit {
   showModal = false;
   selectedProduct: ProductDto | null = null;
 
-  constructor(private apiClient: HallozeenApiClient, private cdr: ChangeDetectorRef) {}
+  constructor(private apiClient: HallozeenApiClient, private cdr: ChangeDetectorRef, private router: Router) {}
 
   ngOnInit(): void {
     this.apiClient.productsAll().subscribe({
@@ -34,14 +35,42 @@ export class ProductsComponent implements OnInit {
   trackById = (_: number, item: ProductDto) => item.id ?? _;
 
   openProduct(p: ProductDto) {
-    this.selectedProduct = p;
-    this.showModal = true;
+    const id = p.id;
+    if (id == null) {
+      return;
+    }
+
+    // Reset current selection while loading fresh data
+    this.showModal = false;
+    this.selectedProduct = null;
     this.cdr.detectChanges();
+
+    this.apiClient.products(id).subscribe({
+      next: (full) => {
+        this.selectedProduct = full;
+        this.showModal = true;
+        this.cdr.detectChanges();
+      },
+      error: () => {
+        // Keep modal closed on error; optionally add user feedback here
+        this.showModal = false;
+        this.selectedProduct = null;
+        this.cdr.detectChanges();
+      }
+    });
   }
 
   closeModal() {
     this.showModal = false;
     this.selectedProduct = null;
     this.cdr.detectChanges();
+  }
+
+  goToCart() {
+    this.router.navigate(['/shopping-bag']);
+  }
+
+  goProfile() {
+    this.router.navigate(['/profile']);
   }
 }

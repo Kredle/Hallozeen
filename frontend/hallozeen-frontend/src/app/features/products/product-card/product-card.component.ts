@@ -1,5 +1,6 @@
 import { Component, HostListener, Input, ElementRef } from '@angular/core';
 import { ProductDto } from '../../../api/hallozeen-api-client';
+import { CartService } from '../../cart/cart.service';
 
 @Component({
   selector: 'app-product-card',
@@ -12,7 +13,7 @@ export class ProductCardComponent {
   @Input() product?: ProductDto;
   @Input() selected = false;
   
-  constructor(private el: ElementRef<HTMLElement>) {}
+  constructor(private el: ElementRef<HTMLElement>, private cart: CartService) {}
 
   get displayTitle(): string {
     return this.product?.name ?? 'The Grimoire of Glitches';
@@ -28,6 +29,19 @@ export class ProductCardComponent {
 
   toggleSelected(): void {
     this.selected = !this.selected;
+  }
+
+  addToCart(event: MouseEvent): void {
+    event.stopPropagation();
+    const id = this.product?.id;
+    if (id != null) {
+      this.cart.add(id, 1, {
+        name: this.product?.name ?? undefined,
+        cost: this.product?.cost ?? undefined,
+        imageUrl: (this.product?.imageUrl as any) ?? undefined,
+        weirdCostTitle: (this.product as any)?.weirdCostTitle ?? undefined
+      });
+    }
   }
 
   @HostListener('document:click', ['$event'])

@@ -34,6 +34,14 @@
   aspect-ratio: 1;
 }
 
+.no-data {
+  color: var(--grey, #706e6e);
+  font-family: 'Share Tech Mono';
+  font-size: 24px;
+  text-align: center;
+  margin-top: 48px;
+}
+
 .content {
   width: 100%;
   max-width: 1450px;
@@ -46,6 +54,19 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.right-actions { display: inline-flex; align-items: center; gap: 12px; }
+.profile-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+.profile-btn img { width: 36px; height: 36px; }
 
 .back-link {
   text-decoration: none;
