@@ -64,12 +64,7 @@
                       @if (isLoading(o)) {
                         <div class="loading">Summoning pact details...</div>
                       } @else {
-                      <div class="summary-row">
-                        <div class="addr">
-                          13 Cobweb Lane, Hollow’s End, Dreadvale, 8888<br/>
-                          {{ user?.username || '—' }}
-                        </div>
-                      </div>
+                      
                       @if (productsOf(details[orderIdOf(o)]).length) {
                         <ul class="prod-list">
                           @for (p of productsOf(details[orderIdOf(o)]); track $index) {
