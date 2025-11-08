@@ -1,14 +1,12 @@
-<div class="item" [class.is-selected]="selected" (click)="toggleSelected()">
-  <img class="product" [src]="imageSrc" [alt]="displayTitle || 'Potion'" />
-  
-  <div class="btm">
-    <div class="product-name">{{ displayTitle }}</div>
-    <div class="price">
-      <div class="price-text">{{ displayPrice + ' soul fragments' }}</div>
-      <div class="skull">
-        <img class="group" src="assets/svg/white_skull.svg" />
-      </div>
+<img class="product" [src]="imageSrc" [alt]="displayTitle || 'Potion'" />
+
+<div class="btm">
+  <div class="product-name">{{ displayTitle }}</div>
+  <div class="price">
+    <div class="price-text">{{ displayPrice + ' soul fragments' }}</div>
+    <div class="skull">
+      <img class="group" src="assets/svg/white_skull.svg" />
     </div>
-    <div class="add-to-cart-btn" (click)="addToCart($event)">TEMPT FATE</div>
   </div>
+  <div class="add-to-cart-btn" (click)="addToCart($event)">TEMPT FATE</div>
 </div>

@@ -1,4 +1,7 @@
-.item {
+:host {
+  /* Compose rotation via CSS variable so parent transform can include it */
+  --card-rotate: rotateX(0deg);
+
   display: flex;
   width: 350px;
   padding: 60px;
@@ -10,20 +13,21 @@
   border: 1px solid rgba(255, 255, 255, 0.18);
   -webkit-backdrop-filter: blur(12px) saturate(140%);
   backdrop-filter: blur(12px) saturate(110%);
-  transition: transform 300ms ease, background 200ms ease, box-shadow 200ms ease;
+  /* Static flip: no animation on transform */
+  transition: background 200ms ease, box-shadow 200ms ease;
   cursor: pointer;
 
   &:hover {
     background: rgba(255, 255, 255, 0.06);
     box-shadow: 0 0 20px 0 rgba(38, 231, 96, 0.8);
 
-    // fully flip card vertically
-    transform: rotateX(180deg);
+    // fully flip card vertically (old animation)
+    --card-rotate: rotateX(180deg);
   }
 
   // on select, unflip and make gradient background
   &.is-selected {
-    transform: rotateX(0deg);
+    --card-rotate: rotateX(0deg);
     background: var(--theme-gradient-1, linear-gradient(135deg, #8B1FB8 0%, #04DB73 100%));
   }
 }

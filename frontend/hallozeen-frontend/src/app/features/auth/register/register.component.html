@@ -6,6 +6,11 @@
 </header>
 
 <div class="form-container">
+  @if (isLoading()) {
+    <div class="loading-overlay" role="status" aria-live="polite" aria-label="Loading">
+      <img class="pumpkin-spin" src="assets/svg/shopping-bag.svg" alt="Loading" />
+    </div>
+  }
   <a href="/">
     <div class="back-home">
       <img src="assets/svg/back.svg" alt="" aria-hidden="true" />
@@ -65,7 +70,7 @@
     </div>
 
     <!-- Password -->
-    <div class="form-input" [class.invalid]="passwordCtrl.invalid && passwordCtrl.touched">
+    <div class="form-input" [class.invalid]="(passwordCtrl.invalid && passwordCtrl.touched) || !!passwordServerError()">
       <label for="password">BINDING SPELL</label>
       <input
         type="password"
@@ -78,6 +83,9 @@
         minlength="8"
         pattern="^(?=.*[A-Za-z])(?=.*\d).{8,}$"
         autocomplete="new-password"
+        (ngModelChange)="onPasswordChange()"
+        (input)="onPasswordChange($event.target.value)"
+        (blur)="onPasswordChange()"
       />
       @if (passwordCtrl.touched && passwordCtrl.errors) {
       <div class="err">
@@ -85,6 +93,9 @@
         (passwordCtrl.errors['minlength']) { <span>At least 8 characters.</span> } @if
         (passwordCtrl.errors['pattern']) { <span>Use letters and numbers.</span> }
       </div>
+      }
+      @if (!!passwordServerError()) {
+      <div class="err">{{ passwordServerError() }}</div>
       }
     </div>
 
@@ -146,14 +157,18 @@
           }
         </ul>
       }
+      
+      @if (!!passwordServerError()) {
+      <div class="err">{{ passwordServerError() }}</div>
+      }
     </div>
     }
 
     <button
       class="register-btn"
       type="submit"
-      [disabled]="regForm.invalid || !passwordsMatch || isLoading()"
-      aria-disabled="{{ regForm.invalid || !passwordsMatch || isLoading() }}"
+      [disabled]="regForm.invalid || !passwordsMatch || isLoading() || !!passwordServerError()"
+      aria-disabled="{{ regForm.invalid || !passwordsMatch || isLoading() || !!passwordServerError() }}"
     >
       OFFER YOUR SOUL
     </button>
@@ -183,3 +198,7 @@
   By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after
   midnight.
 </footer>
+
+@if (captcha.required()) {
+  <app-captcha-modal></app-captcha-modal>
+}

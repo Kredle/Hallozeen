@@ -1,15 +1,18 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnDestroy, signal, NgZone } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { HallozeenApiClient, RegisterRequestDTO, ApiException } from '../../../api/hallozeen-api-client';
+import { HallozeenApiClient, RegisterRequestDTO, ApiException, PasswordCheckDto } from '../../../api/hallozeen-api-client';
+import { CaptchaModalComponent } from '../../../shared/captcha/captcha-modal.component';
+import { CaptchaService } from '../../../shared/captcha/captcha.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, CaptchaModalComponent],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnDestroy {
   name = '';
   email = '';
   password = '';
@@ -20,6 +23,10 @@ export class RegisterComponent {
   isLoading = signal(false);
   registerFailed = signal(false);
   errorMessages = signal<string[]>([]);
+  passwordServerError = signal<string | null>(null);
+
+  private passwordCheckTimer: any;
+  private passwordCheckSub?: Subscription;
 
   get hasAllPasswords(): boolean {
     return !!this.password && !!this.passValidation && !!this.passValidation2;
@@ -33,7 +40,43 @@ export class RegisterComponent {
     );
   }
 
-  constructor(private api: HallozeenApiClient) {}
+  constructor(private api: HallozeenApiClient, public captcha: CaptchaService, private zone: NgZone) {
+    // Ensure captcha appears when entering this page
+    this.captcha.requireAgain();
+  }
+
+  onPasswordChange(next?: string) {
+    if (typeof next === 'string') this.password = next;
+    // Debounce server check to avoid spamming endpoint
+    this.passwordServerError.set(null);
+    if (this.passwordCheckTimer) {
+      clearTimeout(this.passwordCheckTimer);
+    }
+    this.passwordCheckTimer = setTimeout(() => this.checkPasswordServerSide(), 350);
+  }
+
+  private checkPasswordServerSide() {
+    // Skip empty password
+    if (!this.password?.trim()) {
+      this.passwordServerError.set(null);
+      return;
+    }
+    // Cancel previous in-flight check
+    this.passwordCheckSub?.unsubscribe();
+    const body = new PasswordCheckDto({ password: this.password });
+    this.passwordCheckSub = this.api
+      .checkPassword(body)
+      .subscribe({
+        next: () => {
+          this.zone.run(() => this.passwordServerError.set(null));
+        },
+        error: (err) => {
+          const msgs = this.extractApiErrors(err);
+          console.error('Password check failed:', err, 'parsed:', msgs);
+          this.zone.run(() => this.passwordServerError.set(msgs[0] ?? 'Password does not meet requirements.'));
+        }
+      });
+  }
 
   onSubmit(form: NgForm) {
     if (!form.valid || !this.passwordsMatch) {
@@ -53,6 +96,8 @@ export class RegisterComponent {
       confirmPassword2: this.passValidation2,
     });
 
+    if (this.captcha.required()) return;
+
     this.api.register(body).subscribe({
       next: () => {
         this.isLoading.set(false);
@@ -64,6 +109,7 @@ export class RegisterComponent {
         this.registerFailed.set(true);
         this.isSubmitted.set(false);
         this.errorMessages.set(this.extractApiErrors(err));
+        this.captcha.reset();
         // Reset form on unsuccessful attempt
         form.resetForm({
           name: '',
@@ -72,6 +118,7 @@ export class RegisterComponent {
           passValidation: '',
           passValidation2: ''
         });
+        this.passwordServerError.set(null);
       }
     });
   }
@@ -93,13 +140,28 @@ export class RegisterComponent {
     const msgs: string[] = [];
     if (ApiException.isApiException(err as any)) {
       const apiErr = err as ApiException;
-      const raw = apiErr.response?.toString() ?? '';
+      let raw = apiErr.response?.toString() ?? '';
+      // Trim common prefixes like "400 <message>"
+      const m = raw.match(/^\s*(\d{3})\s+(.+)$/s);
+      if (m) raw = m[2];
       const parsed = this.tryParseJson(raw);
       if (parsed != null) this.collectFromParsed(parsed, msgs);
       if (msgs.length === 0 && raw) msgs.push(raw);
     } else if (err && typeof err === 'object' && 'message' in (err as any)) {
       msgs.push(String((err as any).message));
     }
+    // Try common HttpErrorResponse shapes without importing HttpClient symbols
+    const anyErr: any = err as any;
+    if (msgs.length === 0 && anyErr && typeof anyErr === 'object' && 'error' in anyErr) {
+      const rawErr = anyErr.error;
+      if (typeof rawErr === 'string' && rawErr.trim()) {
+        msgs.push(rawErr);
+      } else if (rawErr && typeof rawErr === 'object') {
+        this.collectFromParsed(rawErr, msgs);
+      }
+    }
+    // If err itself is a plain string
+    if (msgs.length === 0 && typeof err === 'string' && err.trim()) msgs.push(err);
     if (msgs.length === 0) msgs.push('Registration failed. Please check the form and try again.');
     return Array.from(new Set(msgs.map(s => s.trim()).filter(Boolean)));
   }
@@ -121,5 +183,10 @@ export class RegisterComponent {
         else if (typeof val === 'string') out.push(val);
       }
     }
+  }
+
+  ngOnDestroy(): void {
+    if (this.passwordCheckTimer) clearTimeout(this.passwordCheckTimer);
+    this.passwordCheckSub?.unsubscribe();
   }
 }

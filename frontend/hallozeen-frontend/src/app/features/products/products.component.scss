@@ -143,6 +143,7 @@ footer {
   grid-auto-rows: auto;
   justify-content: center;
   margin-top: 2rem;
+  perspective: 1000px; /* needed for 3D flip depth */
 }
 
 /* Nudge hooks: set per-card offsets without breaking layout */
@@ -150,7 +151,8 @@ footer {
   /* Update these per item below (keep defaults at 0) */
   --x: 0px;
   --y: 0px;
-  transform: translate(var(--x), var(--y));
+  /* Compose nudge + card's internal rotation */
+  transform: translate(var(--x), var(--y)) var(--card-rotate, rotateX(0deg));
 }
 
 /* Per-item overrides (fill in values as needed) */

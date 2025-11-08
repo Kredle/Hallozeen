@@ -40,22 +40,19 @@ export class ProductsComponent implements OnInit {
       return;
     }
 
-    // Reset current selection while loading fresh data
-    this.showModal = false;
-    this.selectedProduct = null;
+    // Open instantly with current data, then hydrate with full details
+    this.selectedProduct = p;
+    this.showModal = true;
     this.cdr.detectChanges();
 
     this.apiClient.products(id).subscribe({
       next: (full) => {
         this.selectedProduct = full;
-        this.showModal = true;
         this.cdr.detectChanges();
       },
       error: () => {
-        // Keep modal closed on error; optionally add user feedback here
-        this.showModal = false;
-        this.selectedProduct = null;
-        this.cdr.detectChanges();
+        // Keep modal open with existing lightweight data; optionally show a toast
+        // this.showModal remains true and selectedProduct stays as p
       }
     });
   }

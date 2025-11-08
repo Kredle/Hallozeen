@@ -6,6 +6,11 @@
 </header>
 
 <div class="form-container">
+  @if (isLoading()) {
+    <div class="loading-overlay" role="status" aria-live="polite" aria-label="Loading">
+      <img class="pumpkin-spin" src="assets/svg/shopping-bag.svg" alt="Loading" />
+    </div>
+  }
   <a href="/">
     <div class="back-home">
       <img src="assets/svg/back.svg" alt="" aria-hidden="true" />
@@ -105,3 +110,7 @@
   By scrolling this far, you’ve agreed to something unspeakable. © 2025 Hallozeen. No refunds after
   midnight.
 </footer>
+
+@if (captcha.required()) {
+  <app-captcha-modal (solved)="onCaptchaSolved()"></app-captcha-modal>
+}

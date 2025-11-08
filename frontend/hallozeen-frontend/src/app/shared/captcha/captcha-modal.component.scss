@@ -1,0 +1,118 @@
+.captcha-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 7, 18, 0.75);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+}
+
+.captcha-card {
+  width: min(92vw, 520px);
+  background: #2d3147;
+  color: #d9d9e3;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.45), inset 0 0 0 1px rgba(255,255,255,.06);
+  padding: 20px 18px 18px;
+  font-family: 'Share Tech Mono', monospace;
+}
+
+.card-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0 0 4px;
+  font-weight: 400;
+  letter-spacing: 1px;
+  color: #39ff88;
+  text-align: center;
+  width: 100%;
+}
+.title.error { color: #ff3b3b; }
+.title.success { color: #39ff88; }
+
+.subtitle {
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.7;
+  margin-bottom: 12px;
+}
+
+.maze-wrap {
+  position: relative;
+  margin: 6px auto 12px;
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1 / 1;
+  overflow: visible; /* позволяем канвасу выходить за рамки svg */
+}
+
+.maze {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+.draw-layer {
+  position: absolute;
+  inset: 0; /* будет переопределено inline-стилями из TS для overscan */
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.labels {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 12px;
+  color: #8e8ea0;
+}
+.labels .start { position: absolute; left: -9%; top: 16%; }
+.labels .finish { position: absolute; right: -9%; bottom: 16%; }
+
+/* убрали кнопку reset в правом верхнем углу */
+
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  min-height: 40px;
+}
+
+/* Кнопки как у регистрации (.register-btn) */
+.cta {
+  display: flex;
+  width: 100%;
+  height: 80px;
+  padding: 24px;
+  margin-top: 40px; /* больше отступ, чтобы не рисовать по кнопке */
+  justify-content: center;
+  align-items: center;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--grey, #706e6e);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: normal;
+  cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  transition: transform 150ms ease, background 150ms ease, color 150ms ease;
+}
+.cta:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.12);
+  color: #a19f9f;
+}
+
+.hint { opacity: 0.7; font-size: 12px; }

@@ -1,0 +1,42 @@
+<div class="captcha-backdrop" role="dialog" aria-modal="true">
+  <div class="captcha-card">
+    <div class="card-header">
+      @if (state() === 'success') {
+        <h2 class="title success">THE LABYRINTH RELEASES YOU. PROCEED, MORTAL.</h2>
+      } @else if (state() === 'failed') {
+        <h2 class="title error">YOU WERE NOT MEANT TO ESCAPE THIS TIME</h2>
+      } @else {
+        <h2 class="title">PROVE YOUR HEART STILL BEATS</h2>
+      }
+    </div>
+
+    <div class="subtitle">
+      <p>One exit. Many screams.</p>
+      <p>Find your way out before the walls close in</p>
+    </div>
+
+    <div class="maze-wrap">
+      <img #img class="maze" src="assets/svg/captcha.svg" alt="Maze captcha" />
+      <canvas
+        #canvas
+        class="draw-layer"
+        (pointerdown)="onPointerDown($event)"
+        (pointermove)="onPointerMove($event)"
+        (pointerup)="onPointerUp($event)"
+        (pointercancel)="onPointerUp($event)"
+      ></canvas>
+      <div class="labels">
+        <span class="start">START</span>
+        <span class="finish">FINISH</span>
+      </div>
+    </div>
+
+    <div class="actions">
+      @if (state() === 'success') {
+        <button class="cta" (click)="onContinue()">Continue</button>
+      } @else if (state() === 'failed') {
+        <button class="cta" (click)="onReset()">Try again</button>
+      }
+    </div>
+  </div>
+</div>

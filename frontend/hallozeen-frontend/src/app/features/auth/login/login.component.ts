@@ -5,11 +5,13 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../auth/auth.service';
 import { appConfig } from '../../../app.config';
 import { ApiException } from '../../../api/hallozeen-api-client';
+import { CaptchaModalComponent } from '../../../shared/captcha/captcha-modal.component';
+import { CaptchaService } from '../../../shared/captcha/captcha.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CaptchaModalComponent],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
@@ -21,7 +23,10 @@ export class LoginComponent {
   isLoading = signal(false);
   errorMessages = signal<string[]>([]);
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService, private router: Router, public captcha: CaptchaService) {
+    // Ensure captcha appears when entering this page
+    this.captcha.requireAgain();
+  }
 
   onLogin(form: NgForm) {
     if (form.invalid) return;
@@ -29,6 +34,9 @@ export class LoginComponent {
     this.isLoading.set(true);
     this.loginFailed.set(false);
     this.errorMessages.set([]);
+
+    // Prevent submitting until captcha solved
+    if (this.captcha.required()) return;
 
     this.auth.login(this.email, this.password).subscribe({
       next: () => {
@@ -41,6 +49,8 @@ export class LoginComponent {
         this.loginFailed.set(true);
         this.isSubmitted.set(false);
         this.errorMessages.set(this.extractApiErrors(err));
+        // Show captcha again after a failed attempt
+        this.captcha.reset();
       },
     });
   }
@@ -52,6 +62,10 @@ export class LoginComponent {
   onPopupClose() {
     this.isSubmitted.set(false);
     this.router.navigate(['/login/success']);
+  }
+
+  onCaptchaSolved() {
+    // Captcha component already updates the service; this hook is reserved for side-effects if needed.
   }
 
   onAdClick() {
